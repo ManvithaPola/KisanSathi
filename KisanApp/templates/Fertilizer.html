@@ -1,0 +1,1019 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fertilizer Recommendation - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+                pale: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* ── Dark Mode ── */
+      .dark {
+        background-color: #0b1120;
+        color: #e2e8f0;
+      }
+      .dark .nav-bg {
+        background-color: #0f172a !important;
+        border-bottom-color: #1e293b !important;
+      }
+      .dark .card-bg {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .section-bg {
+        background-color: #0b1120 !important;
+      }
+      .dark .footer-bg {
+        background-color: #060c18 !important;
+      }
+      .dark .input-wrap {
+        background-color: #162032 !important;
+        border-color: #334155 !important;
+      }
+      .dark .field-input {
+        background-color: #162032 !important;
+        color: #e2e8f0 !important;
+      }
+      .dark .field-input::placeholder {
+        color: #64748b !important;
+      }
+      .dark .field-select {
+        background-color: #162032 !important;
+        color: #e2e8f0 !important;
+        border-color: transparent !important;
+      }
+      .dark .section-label {
+        color: #94a3b8 !important;
+      }
+      .dark .divider-soft {
+        border-color: #334155 !important;
+      }
+      .dark .result-card {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .result-inner {
+        background-color: #0f2a10 !important;
+        border-color: #1a4a1e !important;
+      }
+      .dark .empty-state {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .tip-box {
+        background-color: #1c1a0a !important;
+        border-color: #3d3510 !important;
+      }
+      .dark .group-label {
+        color: #cbd5e1 !important;
+      }
+
+      /* ── Toggle switch ── */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 0.3s ease;
+      }
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      }
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* ── Hero ── */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          #1b5e20 0%,
+          #2e7d32 60%,
+          #388e3c 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .dark .hero-section {
+        background: linear-gradient(
+          135deg,
+          #0a1f0b 0%,
+          #0f2a10 60%,
+          #112b12 100%
+        );
+      }
+
+      /* ── Input wrapper (icon + field) ── */
+      .input-wrap {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 12px;
+        background-color: #f9fafb;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+        overflow: hidden;
+      }
+      .input-wrap:focus-within {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+      }
+      .input-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #94a3b8;
+        font-size: 0.85rem;
+      }
+      .input-wrap:focus-within .input-icon {
+        color: #2e7d32;
+      }
+      .dark .input-wrap:focus-within .input-icon {
+        color: #4caf50;
+      }
+
+      .field-input,
+      .field-select {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 11px 12px 11px 0;
+        font-size: 0.875rem;
+        color: #374151;
+        font-family: "DM Sans", sans-serif;
+        width: 100%;
+      }
+      .field-select {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 32px;
+      }
+      .select-wrapper {
+        position: relative;
+        flex: 1;
+      }
+      .select-wrapper::after {
+        content: "";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid #94a3b8;
+        pointer-events: none;
+      }
+
+      /* ── Submit button ── */
+      .submit-btn {
+        background: linear-gradient(135deg, #1b5e20, #4caf50);
+        box-shadow: 0 4px 16px rgba(46, 125, 50, 0.35);
+        transition: all 0.25s ease;
+      }
+      .submit-btn:hover {
+        box-shadow: 0 8px 24px rgba(46, 125, 50, 0.45);
+        transform: translateY(-1px);
+      }
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      /* ── NPK pill badges ── */
+      .npk-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border: 1.5px solid;
+      }
+
+      /* ── Result card ── */
+      .result-card {
+        animation: slideUp 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(32px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── Fertilizer name shine ── */
+      .fert-name {
+        background: linear-gradient(135deg, #1b5e20, #4caf50, #66bb6a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .dark .fert-name {
+        background: linear-gradient(135deg, #66bb6a, #a5d6a7);
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      /* ── Spinner ── */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .spinner {
+        animation: spin 0.8s linear infinite;
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease both;
+      }
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+
+      /* ── Section separator ── */
+      .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- ════════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'FarmerDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section class="hero-section pt-16">
+      <div class="relative z-10 container mx-auto px-4 py-14 text-center">
+        <!-- Icon panel -->
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 fade-up"
+          style="
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          "
+        >
+          <i class="fas fa-flask text-2xl text-white"></i>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div
+          class="flex items-center justify-center gap-2 text-green-200 text-xs mb-4 fade-up"
+        >
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span>AI Tools</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span class="text-white font-medium">Fertilizer Advisor</span>
+        </div>
+
+        <!-- Title -->
+        <h2
+          class="text-3xl md:text-4xl font-bold text-white mb-3 fade-up delay-1"
+          style="font-family: &quot;Lora&quot;, serif"
+        >
+          AI Fertilizer Recommendation
+        </h2>
+
+        <!-- Subtitle -->
+        <p
+          class="text-green-100 max-w-xl mx-auto text-sm md:text-base leading-relaxed fade-up delay-2"
+        >
+          Enter soil and environmental parameters to receive AI-powered
+          fertilizer suggestions tailored to your specific crop and conditions.
+        </p>
+
+        <!-- Trust badges -->
+        <div
+          class="flex flex-wrap items-center justify-center gap-3 mt-6 fade-up delay-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-robot"></i> AI Powered
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-bullseye"></i> Precision Agriculture
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-atom"></i> Smart Nutrient Analysis
+          </span>
+        </div>
+      </div>
+
+      <!-- Wave -->
+      <div class="overflow-hidden leading-none" style="height: 50px">
+        <svg
+          viewBox="0 0 1440 50"
+          preserveAspectRatio="none"
+          class="w-full h-full"
+        >
+          <path
+            d="M0,30 C480,60 960,0 1440,30 L1440,50 L0,50 Z"
+            fill="#f9fafb"
+            class="dark:fill-[#0b1120]"
+          />
+        </svg>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════════════════ -->
+    <section class="section-bg py-12 bg-gray-50 dark:bg-[#0b1120] min-h-screen">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+          <!-- ── Form Card ── -->
+          <div
+            class="card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] fade-up"
+          >
+            <!-- Card Header -->
+            <div class="px-7 pt-7 pb-5 flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0"
+              >
+                <i
+                  class="fas fa-seedling text-primary-dark dark:text-green-400 text-lg"
+                ></i>
+              </div>
+              <div>
+                <h3
+                  class="font-bold text-gray-800 dark:text-white text-base"
+                  style="font-family: &quot;Lora&quot;, serif"
+                >
+                  Enter Farm Parameters
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  All fields are required for accurate AI prediction.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="border-t border-gray-100 dark:border-[#334155] mx-7"
+            ></div>
+
+            <!-- Form -->
+            <form
+              method="POST"
+              action="{% url 'Fertilizer' %}"
+              class="px-8 py-8 space-y-10"
+              id="fertForm"
+            >
+              {% csrf_token %}
+
+              <!-- ───────── Environmental Section ───────── -->
+              <div
+                class="bg-gray-50 dark:bg-[#162032] rounded-2xl p-6 border border-gray-100 dark:border-[#334155] space-y-6"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center"
+                  >
+                    <i
+                      class="fas fa-cloud-sun text-green-600 dark:text-green-400 text-sm"
+                    ></i>
+                  </div>
+                  <h4
+                    class="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
+                  >
+                    Environmental Conditions
+                  </h4>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- Temperature -->
+                  <div class="space-y-2">
+                    <label class="text-xs text-gray-500 dark:text-gray-400"
+                      >Temperature (°C)</label
+                    >
+                    <input
+                      type="number"
+                      name="t1"
+                      step="0.1"
+                      required
+                      class="w-full h-12 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+                    />
+                  </div>
+
+                  <!-- Humidity -->
+                  <div class="space-y-2">
+                    <label class="text-xs text-gray-500 dark:text-gray-400"
+                      >Humidity (%)</label
+                    >
+                    <input
+                      type="number"
+                      name="t2"
+                      step="0.1"
+                      required
+                      class="w-full h-12 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+                    />
+                  </div>
+
+                  <!-- Moisture -->
+                  <div class="space-y-2">
+                    <label class="text-xs text-gray-500 dark:text-gray-400"
+                      >Moisture (%)</label
+                    >
+                    <input
+                      type="number"
+                      name="t3"
+                      step="0.1"
+                      required
+                      class="w-full h-12 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-green-500 focus:outline-none transition"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ───────── Soil & Crop Section ───────── -->
+              <div
+                class="bg-gray-50 dark:bg-[#162032] rounded-2xl p-6 border border-gray-100 dark:border-[#334155] space-y-6"
+              >
+                <!-- Section Header -->
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"
+                  >
+                    <i
+                      class="fas fa-seedling text-blue-600 dark:text-blue-400 text-sm"
+                    ></i>
+                  </div>
+                  <h4
+                    class="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
+                  >
+                    Soil & Crop Type
+                  </h4>
+                </div>
+
+                <!-- Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Soil Type -->
+                  <div class="space-y-2">
+                    <label
+                      class="text-xs font-medium text-gray-500 dark:text-gray-400"
+                    >
+                      Soil Type
+                    </label>
+
+                    <div class="relative">
+                      <select
+                        name="t4"
+                        required
+                        class="w-full h-12 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-green-500 focus:outline-none transition appearance-none"
+                      >
+                        <option value="" disabled selected>
+                          Select Soil Type
+                        </option>
+
+                        {% for soil in soil_list %}
+                        <option value="{{ soil }}">{{ soil }}</option>
+                        {% endfor %}
+                      </select>
+
+                      <!-- Dropdown Arrow -->
+                      <div
+                        class="absolute inset-y-0 right-4 flex items-center pointer-events-none"
+                      >
+                        <i
+                          class="fas fa-chevron-down text-gray-400 text-xs"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Crop Type -->
+                  <div class="space-y-2">
+                    <label
+                      class="text-xs font-medium text-gray-500 dark:text-gray-400"
+                    >
+                      Crop Type
+                    </label>
+
+                    <div class="relative">
+                      <select
+                        name="t5"
+                        required
+                        class="w-full h-12 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-green-500 focus:outline-none transition appearance-none"
+                      >
+                        <option value="" disabled selected>
+                          Select Crop Type
+                        </option>
+
+                        {% for crop in crop_list %}
+                        <option value="{{ crop }}">{{ crop }}</option>
+                        {% endfor %}
+                      </select>
+
+                      <!-- Dropdown Arrow -->
+                      <div
+                        class="absolute inset-y-0 right-4 flex items-center pointer-events-none"
+                      >
+                        <i
+                          class="fas fa-chevron-down text-gray-400 text-xs"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ───────── NPK Panel ───────── -->
+              <div
+                class="bg-gradient-to-r from-green-50 to-green-100 dark:from-[#0f2a10] dark:to-[#112b12] rounded-2xl p-6 border border-green-200 dark:border-green-900/40 space-y-6"
+              >
+                <div class="text-center">
+                  <h4
+                    class="text-sm font-bold text-green-700 dark:text-green-400 uppercase tracking-wider"
+                  >
+                    Soil Nutrient Levels (NPK)
+                  </h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Enter current soil nutrient concentrations
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                  <!-- N -->
+                  <div class="space-y-2">
+                    <div
+                      class="w-10 h-10 mx-auto rounded-full bg-blue-500 text-white flex items-center justify-center font-bold"
+                    >
+                      N
+                    </div>
+                    <input
+                      type="number"
+                      name="t6"
+                      required
+                      placeholder="Nitrogen"
+                      class="w-full h-11 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-center"
+                    />
+                  </div>
+
+                  <!-- P -->
+                  <div class="space-y-2">
+                    <div
+                      class="w-10 h-10 mx-auto rounded-full bg-orange-500 text-white flex items-center justify-center font-bold"
+                    >
+                      P
+                    </div>
+                    <input
+                      type="number"
+                      name="t7"
+                      required
+                      placeholder="Phosphorus"
+                      class="w-full h-11 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none transition text-center"
+                    />
+                  </div>
+
+                  <!-- K -->
+                  <div class="space-y-2">
+                    <div
+                      class="w-10 h-10 mx-auto rounded-full bg-purple-500 text-white flex items-center justify-center font-bold"
+                    >
+                      K
+                    </div>
+                    <input
+                      type="number"
+                      name="t8"
+                      required
+                      placeholder="Potassium"
+                      class="w-full h-11 px-4 rounded-xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-[#334155] text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none transition text-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button
+                type="submit"
+                id="submitBtn"
+                class="w-full py-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-green-600 to-green-500 hover:shadow-xl hover:scale-[1.01] transition-all duration-200"
+              >
+                <i class="fas fa-flask mr-2 text-xs" id="btnIcon"></i>
+                <span id="btnText">Analyse & Recommend Fertilizer</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- ════════════════════════════════════════════
+               RESULT SECTION
+          ════════════════════════════════════════════ -->
+          {% if data %}
+          <div
+            class="result-card mt-8 card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155]"
+          >
+            <!-- Result Header -->
+            <div class="px-7 pt-7 pb-5 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0"
+                >
+                  <i
+                    class="fas fa-flask text-primary-dark dark:text-green-400 text-lg"
+                  ></i>
+                </div>
+                <div>
+                  <h3
+                    class="font-bold text-gray-800 dark:text-white text-base"
+                    style="font-family: &quot;Lora&quot;, serif"
+                  >
+                    AI Recommendation Result
+                  </h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Based on your soil and crop parameters
+                  </p>
+                </div>
+              </div>
+              <span
+                class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-100 dark:border-green-900/40"
+              >
+                <i class="fas fa-check-circle text-[10px]"></i> Predicted
+              </span>
+            </div>
+
+            <div
+              class="border-t border-gray-100 dark:border-[#334155] mx-7"
+            ></div>
+
+            <div class="px-7 py-6">
+              <!-- Fertilizer highlight box -->
+              <div
+                class="result-inner bg-green-50 dark:bg-[#0f2a10] border border-green-100 dark:border-[#1a4a1e] rounded-2xl px-6 py-8 text-center"
+              >
+                <!-- Decorative icon -->
+                <div
+                  class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                  style="
+                    background: linear-gradient(135deg, #2e7d32, #4caf50);
+                    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+                  "
+                >
+                  <i class="fas fa-leaf text-white text-2xl"></i>
+                </div>
+
+                <p
+                  class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2"
+                >
+                  Recommended Fertilizer
+                </p>
+
+                <!-- Fertilizer Name -->
+                <h2
+                  class="fert-name text-3xl md:text-4xl font-bold mb-3"
+                  style="font-family: &quot;Lora&quot;, serif"
+                >
+                  {{ data }}
+                </h2>
+
+                <!-- Sub info -->
+                <div
+                  class="flex flex-wrap items-center justify-center gap-2 mt-4"
+                >
+                  <span
+                    class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-200 dark:border-green-800 shadow-sm"
+                  >
+                    <i class="fas fa-robot text-[10px]"></i> AI Predicted
+                  </span>
+                  <span
+                    class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-200 dark:border-green-800 shadow-sm"
+                  >
+                    <i class="fas fa-bullseye text-[10px]"></i> Precision Match
+                  </span>
+                </div>
+              </div>
+
+              <!-- Advisory note -->
+              <div
+                class="tip-box mt-5 bg-amber-50 dark:bg-[#1c1a0a] border border-amber-100 dark:border-[#3d3510] rounded-xl px-4 py-3 flex items-start gap-2.5"
+              >
+                <i
+                  class="fas fa-info-circle text-amber-500 dark:text-amber-400 text-sm mt-0.5 flex-shrink-0"
+                ></i>
+                <p
+                  class="text-xs text-amber-700 dark:text-amber-400 leading-relaxed"
+                >
+                  This recommendation is AI-generated based on the parameters
+                  provided. Please consult a certified agronomist before
+                  applying fertilizers in large quantities.
+                </p>
+              </div>
+
+              <!-- Attribution -->
+              <div
+                class="flex items-center justify-between mt-4 text-xs text-gray-400 dark:text-gray-500"
+              >
+                <span class="flex items-center gap-1">
+                  <i class="fas fa-robot text-primary-light"></i>
+                  KisanSathi AI Model
+                </span>
+                <span
+                  class="flex items-center gap-1 text-green-600 dark:text-green-400 font-medium"
+                >
+                  <i class="fas fa-shield-alt text-[10px]"></i>
+                  Verified Analysis
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {% else %}
+
+          <!-- ── Empty / Pre-submit State ── -->
+          <div
+            class="empty-state mt-8 bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-2xl shadow-sm px-8 py-12 text-center fade-up delay-1"
+          >
+            <div
+              class="w-16 h-16 rounded-2xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4"
+            >
+              <i
+                class="fas fa-flask text-primary-dark dark:text-green-400 text-2xl"
+              ></i>
+            </div>
+            <h4
+              class="font-bold text-gray-600 dark:text-gray-300 text-base mb-2"
+              style="font-family: &quot;Lora&quot;, serif"
+            >
+              Ready to Analyse
+            </h4>
+            <p
+              class="text-gray-400 dark:text-gray-500 text-sm leading-relaxed max-w-sm mx-auto"
+            >
+              Enter your soil and environmental parameters above to receive a
+              precise AI-powered fertilizer recommendation.
+            </p>
+
+            <!-- Feature highlights -->
+            <div class="grid grid-cols-3 gap-3 mt-6">
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i class="fas fa-atom text-blue-500 text-lg mb-2 block"></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                  NPK Analysis
+                </p>
+              </div>
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i
+                  class="fas fa-leaf text-primary-light text-lg mb-2 block"
+                ></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                  Crop Match
+                </p>
+              </div>
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i class="fas fa-bolt text-amber-500 text-lg mb-2 block"></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                  Instant Result
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {% endif %}
+
+          <!-- Info note -->
+          <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-6">
+            <i class="fas fa-info-circle mr-1"></i>
+            AI recommendations are indicative. Always verify with a certified
+            agricultural expert before application.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+
+          <p class="text-green-300 font-medium text-sm">Government of India</p>
+
+          <div
+            class="mt-4 flex items-center justify-center space-x-4 text-green-200 text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lock"></i> SSL Secured
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-shield-alt"></i> Government Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════
+         SCRIPTS
+    ════════════════════════════════════════════ -->
+    <script>
+      // ── Dark Mode ──
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("theme") || "light";
+      if (saved === "dark") html.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        localStorage.setItem(
+          "theme",
+          html.classList.contains("dark") ? "dark" : "light",
+        );
+      });
+
+      // ── Form submit spinner ──
+      document
+        .getElementById("fertForm")
+        .addEventListener("submit", function () {
+          const btnText = document.getElementById("btnText");
+          const btnIcon = document.getElementById("btnIcon");
+          const btn = document.getElementById("submitBtn");
+          btnText.textContent = "Analysing Parameters...";
+          btnIcon.className = "fas fa-circle-notch spinner text-xs";
+          btn.disabled = true;
+          btn.style.opacity = "0.8";
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - KisanSathi | AI Assisted Farmer Support System</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+              secondary: {
+                dark: "#558B2F",
+                DEFAULT: "#7CB342",
+                light: "#AED581",
+              },
+              accent: {
+                yellow: "#FBC02D",
+                orange: "#F57C00",
+              },
+            },
+            fontFamily: {
+              sans: ["Poppins", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles matching index.html */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Additional dark mode text colors for visibility */
+      .dark h3,
+      .dark h2,
+      .dark h1,
+      .dark .text-xl,
+      .dark .font-bold {
+        color: #e2e8f0 !important;
+      }
+
+      .dark p {
+        color: #cbd5e1;
+      }
+
+      .dark .text-gray-600,
+      .dark .text-gray-700,
+      .dark .text-gray-800 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .card h3 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .card p {
+        color: #cbd5e1 !important;
+      }
+
+      /* Color Palette */
+      :root {
+        --primary-green: #2d6a4f;
+        --primary-dark: #1b4332;
+        --primary-light: #52b788;
+        --accent-yellow: #f9a825;
+        --accent-orange: #ff6f3c;
+        --bg-light: #f8f9fa;
+        --bg-dark: #0f172a;
+        --text-light: #333333;
+        --text-dark: #e2e8f0;
+      }
+
+      /* Navbar Styles */
+      #navbar {
+        backdrop-filter: blur(10px);
+      }
+
+      .navbar-scrolled {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .navbar-scrolled {
+        background-color: rgba(30, 41, 59, 0.9);
+      }
+
+      .logo-img {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+      }
+
+      .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary-green);
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .mobile-menu.active {
+        max-height: 500px;
+      }
+
+      /* Toggle Switch */
+      .toggle-switch {
+        width: 60px;
+        height: 30px;
+        background: #ccc;
+        border-radius: 30px;
+        position: relative;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .toggle-switch::before {
+        content: "";
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        background: white;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s;
+      }
+
+      .dark .toggle-switch {
+        background: var(--primary-green);
+      }
+
+      .dark .toggle-switch::before {
+        transform: translateX(30px);
+      }
+
+      /* Hero Section */
+      .hero-about {
+        background: linear-gradient(135deg, #d8f3dc 0%, #95d5b2 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dark .hero-about {
+        background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+      }
+
+      .dark .hero-about h1 {
+        color: #86efac !important;
+      }
+
+      .hero-about::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232d6a4f' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.3;
+      }
+
+      /* Section Styles */
+      .section {
+        padding: 80px 0;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--primary-dark);
+      }
+
+      .dark .section-title {
+        color: var(--primary-light);
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: #666;
+        margin-bottom: 3rem;
+      }
+
+      .dark .section-subtitle {
+        color: #94a3b8;
+      }
+
+      /* Card Styles */
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+      }
+
+      .dark .card {
+        background: #1e293b;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .dark .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+      }
+
+      .icon-box {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-light) 0%,
+          var(--primary-green) 100%
+        );
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      /* Problem Card */
+      .problem-card {
+        background: #fff5f5;
+        border-left: 4px solid var(--accent-orange);
+      }
+
+      .dark .problem-card {
+        background: #2d1f1f;
+        border-left-color: var(--accent-orange);
+      }
+
+      /* Solution Card */
+      .solution-card {
+        background: #f0fdf4;
+        border-left: 4px solid var(--primary-green);
+      }
+
+      .dark .solution-card {
+        background: #1a2d23;
+        border-left-color: var(--primary-light);
+      }
+
+      /* Animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* CTA Button */
+      .cta-button {
+        background: linear-gradient(
+          135deg,
+          var(--primary-green) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.125rem;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+      }
+
+      /* Footer */
+      .footer-dark {
+        background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+      }
+
+      /* Vision section */
+      .vision-section {
+        background: linear-gradient(135deg, #d8f3dc 0%, #95d5b2 100%);
+      }
+
+      .dark .vision-section {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      }
+
+      .dark .vision-section .text-gray-800 {
+        color: #cbd5e1 !important;
+      }
+
+      /* CTA Section title */
+      .dark .text-center h2[style*="primary-dark"] {
+        color: var(--primary-light) !important;
+      }
+
+      /* Stats cards */
+      .dark .bg-white.bg-opacity-80 {
+        background-color: rgba(30, 41, 59, 0.8) !important;
+      }
+
+      .dark .text-green-700 {
+        color: #86efac !important;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .section {
+          padding: 60px 0;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+      }
+      /* =========================
+   DARK MODE TEXT FIXES
+========================= */
+
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode li,
+body.dark-mode a {
+  color: #e0e0e0;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5 {
+  color: #ffffff;
+}
+
+/* Section subtitles */
+body.dark-mode .section-subtitle {
+  color: #cfcfcf;
+}
+
+/* Cards text */
+body.dark-mode .card p,
+body.dark-mode .card li {
+  color: #d1d5db;
+}
+
+/* Problem cards */
+body.dark-mode .problem-card {
+  background-color: #2b1f1f;
+}
+
+/* Solution cards */
+body.dark-mode .solution-card {
+  background-color: #1f2f27;
+}
+
+/* CTA section text */
+body.dark-mode .cta-button {
+  color: #ffffff;
+}
+
+/* Footer text */
+body.dark-mode footer p,
+body.dark-mode footer span,
+body.dark-mode footer a {
+  color: #d1fae5;
+}
+
+/* Hero section text */
+body.dark-mode .hero-about h1,
+body.dark-mode .hero-about p {
+  color: #ffffff;
+}
+body.dark-mode #navbar a {
+  color: #e5e7eb;
+}
+
+body.dark-mode #navbar a:hover {
+  color: #a7f3d0;
+}
+body.dark-mode .mobile-menu {
+  background-color: #1f2933;
+}
+
+body.dark-mode .mobile-menu a {
+  color: #e5e7eb;
+}
+body.dark-mode img {
+  filter: brightness(0.95) contrast(1.05);
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md transition-all duration-300"
+    >
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              href="index.html"
+              src="/static/images/logo.png"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+
+            <div>
+              <h1 class="text-2xl font-bold text-[var(--primary-dark)] dark:text-[var(--primary-light)]">
+  KisanSathi
+</h1>
+
+              <p class="text-xs">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Desktop Menu -->
+          <ul class="hidden md:flex items-center space-x-8">
+            <li>
+              <a href="index.html" class="nav-link font-medium">Home</a>
+            </li>
+            <li>
+              <a
+                href="Aboutus.html"
+                class="nav-link font-medium"
+                style="color: var(--primary-green)"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a href="Contactus.html" class="nav-link font-medium">Contact</a>
+            </li>
+            <li>
+              <a href="help.html" class="nav-link font-medium">Help</a>
+            </li>
+          </ul>
+
+          <!-- Right side buttons -->
+          <div class="hidden md:flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+            <a
+              href="{% url 'login' %}"
+              class="px-6 py-2 border-2 rounded-full transition-all font-medium cursor-pointer hover:bg-green-50"
+              style="
+                color: var(--primary-dark);
+                border-color: var(--primary-dark);
+              "
+            >
+              Login
+            </a>
+
+            <a
+              href="{% url 'register' %}"
+              class="px-6 py-2 text-white rounded-full transition-all font-medium cursor-pointer hover:opacity-90"
+              style="background-color: var(--primary-dark)"
+            >
+              Register
+            </a>
+          </div>
+
+          <!-- Mobile menu button -->
+          <button id="mobileMenuBtn" class="md:hidden text-2xl">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden mt-4">
+          <ul class="flex flex-col space-y-3 pb-4">
+            <li>
+              <a href="index.html" class="block font-medium py-2">Home</a>
+            </li>
+            <li>
+              <a
+                href="Aboutus.html"
+                class="block font-medium py-2"
+                style="color: var(--primary-green)"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a href="Contactus.html" class="block font-medium py-2">Contact</a>
+            </li>
+            <li>
+              <a href="help.html" class="block font-medium py-2">Help</a>
+            </li>
+            <li class="flex items-center justify-between py-2">
+              <span class="font-medium">Dark Mode</span>
+              <div class="toggle-switch" id="themeToggleMobile"></div>
+            </li>
+            <li>
+              <a
+                href="login.html"
+                class="block text-center px-6 py-2 border-2 rounded-full transition-all font-medium"
+                style="
+                  color: var(--primary-dark);
+                  border-color: var(--primary-dark);
+                "
+                >Login</a
+              >
+            </li>
+            <li>
+              <a
+                href="register.html"
+                class="block text-center px-6 py-2 text-white rounded-full transition-all font-medium"
+                style="background-color: var(--primary-dark)"
+                >Register</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-about pt-32 pb-20">
+      <div class="container mx-auto px-4 text-center relative z-10">
+        <div class="fade-in">
+          <h1
+            class="text-5xl md:text-6xl font-bold mb-6"
+            style="color: var(--primary-dark)"
+          >
+            About KisanSathi
+          </h1>
+          <p class="text-xl md:text-2xl max-w-4xl mx-auto text-gray-700 dark:text-gray-200" >
+            Empowering farmers by eliminating middlemen and enabling direct
+            access to verified government and expert support.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem Statement Section -->
+    <section class="section">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 fade-in">
+          <h2 class="section-title">Challenges Faced by Farmers</h2>
+          <p class="section-subtitle">
+            Understanding the real problems that impact agricultural
+            productivity and farmer welfare
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Middlemen Exploitation</h3>
+                <p class="text-gray-600">
+                  Farmers receive unfair prices for their crops due to
+                  exploitation by middlemen, reducing their income and making
+                  agriculture financially unsustainable.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Lack of Verified Information
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Farmers struggle to access timely and verified government
+                  information about schemes, crop prices, and agricultural
+                  policies.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Informal Advice Leading to Crop Loss
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Dependence on unverified advice from local sources often leads
+                  to incorrect farming practices, resulting in significant crop
+                  losses.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-user-md"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Limited Expert Access</h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Farmers in remote areas have minimal reach to agricultural
+                  experts and researchers who can provide scientific guidance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-puzzle-piece"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Fragmented Digital Platforms
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Multiple incomplete apps and websites make it confusing for
+                  farmers to find the right information in one place.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card problem-card fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="
+                  background: linear-gradient(135deg, #ff6f3c 0%, #ff4500 100%);
+                "
+              >
+                <i class="fas fa-language"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">
+                  Language and Digital Barriers
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Complex interfaces and language barriers prevent farmers from
+                  effectively using digital agricultural tools.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section" style="background-color: #f9fafb">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 fade-in">
+          <h2 class="section-title">How KisanSathi Helps</h2>
+          <p class="section-subtitle">
+            Our comprehensive platform addresses every challenge with
+            technology-driven solutions
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-link"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">
+              Direct Government Communication
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Connect directly with government officials and receive verified
+              updates on schemes, subsidies, and policies without
+              intermediaries.
+            </p>
+          </div>
+
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Verified Crop Prices</h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Access government-published crop prices in real-time, ensuring
+              fair market rates and eliminating middlemen exploitation.
+            </p>
+          </div>
+
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">AI-Powered Disease Detection</h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Upload crop images to instantly detect diseases and receive
+              AI-driven fertilizer recommendations for better yield.
+            </p>
+          </div>
+
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Expert Guidance Network</h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Get advice from verified agricultural experts and researchers
+              through our moderated collaboration platform.
+            </p>
+          </div>
+
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Unified Single Platform</h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              All farming needs in one place - prices, weather, schemes, expert
+              advice, and community support.
+            </p>
+          </div>
+
+          <div class="card solution-card fade-in">
+            <div class="icon-box">
+              <i class="fas fa-language"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">
+              Multilingual & Simple Interface
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Easy-to-use interface available in multiple regional languages,
+              designed for farmers with varying digital literacy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology & AI Section -->
+    <section class="section">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 fade-in">
+          <h2 class="section-title">Role of Technology & AI</h2>
+          <p class="section-subtitle">
+            Empowering farmers with intelligent tools for informed
+            decision-making
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="fade-in">
+            <img
+              src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800"
+              alt="AI Technology in Agriculture"
+              class="rounded-lg shadow-lg"
+            />
+          </div>
+
+          <div class="space-y-6 fade-in">
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="width: 50px; height: 50px; font-size: 1.25rem"
+              >
+                <i class="fas fa-camera"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold mb-2">
+                  Image-Based Disease Detection
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Simply upload a photo of your crop, and our AI analyzes it to
+                  detect diseases, pests, and nutrient deficiencies with high
+                  accuracy.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="width: 50px; height: 50px; font-size: 1.25rem"
+              >
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold mb-2">
+                  Yield Prediction & Planning
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  AI models predict crop yields based on weather, soil data, and
+                  historical trends, helping you plan better.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="width: 50px; height: 50px; font-size: 1.25rem"
+              >
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold mb-2">
+                  Smart Fertilizer Recommendations
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Get personalized fertilizer suggestions based on soil health,
+                  crop type, and growth stage to optimize productivity.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div
+                class="icon-box"
+                style="width: 50px; height: 50px; font-size: 1.25rem"
+              >
+                <i class="fas fa-comments"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold mb-2">
+                  AI Chatbot for Instant Guidance
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Ask farming questions anytime through our intelligent chatbot
+                  trained on agricultural best practices.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-4 rounded-lg border-l-4 border-green-600"
+            >
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                <strong>Important:</strong> Technology serves as a support
+                system, not a replacement. Final decisions always rest with the
+                farmer, combining AI insights with traditional knowledge.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="section" style="background-color: #f9fafb">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 fade-in">
+          <h2 class="section-title">Farmer Collaboration & Community</h2>
+          <p class="section-subtitle">
+            Building a supportive network where farmers learn and grow together
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-6 fade-in">
+            <div class="card">
+              <div class="flex items-start space-x-4">
+                <div
+                  class="icon-box"
+                  style="width: 50px; height: 50px; font-size: 1.25rem"
+                >
+                  <i class="fas fa-users"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold mb-2">
+                    Crop-Based Farmer Groups
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Join specialized groups based on the crops you grow. Share
+                    experiences, techniques, and learn from fellow farmers.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="flex items-start space-x-4">
+                <div
+                  class="icon-box"
+                  style="width: 50px; height: 50px; font-size: 1.25rem"
+                >
+                  <i class="fas fa-share-alt"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold mb-2">
+                    Knowledge Sharing Platform
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Post questions, share success stories, and exchange farming
+                    tips in a safe, moderated environment.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="flex items-start space-x-4">
+                <div
+                  class="icon-box"
+                  style="width: 50px; height: 50px; font-size: 1.25rem"
+                >
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold mb-2">
+                    Expert-Moderated Discussions
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    All community discussions are moderated by agricultural
+                    experts to ensure reliable and accurate information.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="flex items-start space-x-4">
+                <div
+                  class="icon-box"
+                  style="width: 50px; height: 50px; font-size: 1.25rem"
+                >
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold mb-2">Peer Support Network</h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Build connections with farmers in your region, collaborate
+                    on resources, and support each other during challenges.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fade-in">
+            <img
+              src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800"
+              alt="Farmer Community"
+              class="rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Government & Expert Section -->
+    <section class="section">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 fade-in">
+          <h2 class="section-title">Government & Expert Involvement</h2>
+          <p class="section-subtitle">
+            Ensuring transparency, accountability, and reliable information
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card fade-in">
+            <div
+              class="icon-box"
+              style="
+                background: linear-gradient(135deg, #f9a825 0%, #ff8f00 100%);
+              "
+            >
+              <i class="fas fa-landmark"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Government Administration</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Government officials directly update verified crop prices,
+              schemes, subsidies, and policy information on the platform.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Real-time price updates</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Scheme announcements</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Policy notifications</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card fade-in">
+            <div
+              class="icon-box"
+              style="
+                background: linear-gradient(135deg, #f9a825 0%, #ff8f00 100%);
+              "
+            >
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Agricultural Experts</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Verified researchers and agricultural scientists validate
+              information and provide expert guidance to farmers.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Scientific validation</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Research-backed advice</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Community moderation</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card fade-in">
+            <div
+              class="icon-box"
+              style="
+                background: linear-gradient(135deg, #f9a825 0%, #ff8f00 100%);
+              "
+            >
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Transparency & Trust</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Every piece of information is traceable to its source, ensuring
+              accountability and building farmer trust.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Verified information only</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Source attribution</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
+                <span>Regular audits</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center fade-in">
+          <div
+            class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 p-6 rounded-lg inline-block max-w-3xl"
+          >
+            <i class="fas fa-info-circle text-blue-600 text-3xl mb-3"></i>
+            <h4 class="text-lg font-bold mb-2">Policy-Aligned Platform</h4>
+            <p class="text-gray-700 dark:text-gray-300">
+              KisanSathi operates in full compliance with government
+              agricultural policies and data protection regulations, ensuring a
+              secure and trustworthy environment for all users.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vision & Impact Section -->
+    <section class="section vision-section">
+      <div class="container mx-auto px-4">
+        <div class="text-center max-w-4xl mx-auto fade-in">
+          <h2 class="section-title" style="color: var(--primary-dark)">
+            Our Vision & Impact
+          </h2>
+          <div class="space-y-6 mt-8 text-lg">
+            <p class="text-gray-800">
+              We envision a future where every farmer in India has
+              <strong>direct access to verified information</strong>,
+              eliminating the need for exploitative middlemen and creating a
+              transparent agricultural ecosystem.
+            </p>
+            <p class="text-gray-800">
+              Through <strong>digital empowerment</strong>, we aim to bridge the
+              gap between farmers, government institutions, and agricultural
+              experts, ensuring that knowledge and support reach even the most
+              remote villages.
+            </p>
+            <p class="text-gray-800">
+              By reducing dependency on intermediaries and providing
+              <strong>AI-driven insights</strong>, we strive to increase farm
+              productivity, improve farmer incomes, and contribute to
+              sustainable rural development.
+            </p>
+            <p class="text-gray-800">
+              Our long-term goal is to make KisanSathi the
+              <strong>single trusted platform</strong> that every farmer turns
+              to for prices, advice, community support, and government
+              schemes—creating lasting positive impact on agricultural
+              prosperity.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
+            <div class="bg-white bg-opacity-80 p-6 rounded-lg shadow-md">
+              <div class="text-4xl font-bold text-green-700 mb-2">10,000+</div>
+              <p class="text-gray-700">Farmers Registered</p>
+            </div>
+            <div class="bg-white bg-opacity-80 p-6 rounded-lg shadow-md">
+              <div class="text-4xl font-bold text-green-700 mb-2">500+</div>
+              <p class="text-gray-700">Expert Advisors</p>
+            </div>
+            <div class="bg-white bg-opacity-80 p-6 rounded-lg shadow-md">
+              <div class="text-4xl font-bold text-green-700 mb-2">25+</div>
+              <p class="text-gray-700">States Covered</p>
+            </div>
+            <div class="bg-white bg-opacity-80 p-6 rounded-lg shadow-md">
+              <div class="text-4xl font-bold text-green-700 mb-2">₹2Cr+</div>
+              <p class="text-gray-700">Saved by Farmers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="section text-center">
+      <div class="container mx-auto px-4 fade-in">
+        <h2 class="text-4xl font-bold mb-4" style="color: var(--primary-dark)">
+          Join the KisanSathi Movement
+        </h2>
+        <p
+          class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto"
+        >
+          Be part of the digital transformation in agriculture. Connect with
+          verified experts, access government schemes, and grow your farming
+          success.
+        </p>
+        <a href="#register" class="cta-button">
+          Join KisanSathi Today
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer-dark text-white py-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <!-- Brand -->
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <img
+                src="/static/images/logo.png"
+                alt="KisanSathi Logo"
+                class="logo-img w-12 h-12 object-contain"
+              />
+              <h3 class="text-2xl font-bold">KisanSathi</h3>
+            </div>
+            <p class="text-green-100">
+              Empowering farmers with AI and verified government support for a
+              prosperous agricultural future.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="index.html"
+                  class="text-green-100 hover:text-white transition"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#features"
+                  class="text-green-100 hover:text-white transition"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a
+                  href="about.html"
+                  class="text-green-100 hover:text-white transition"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#register"
+                  class="text-green-100 hover:text-white transition"
+                  >Register</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div id="help">
+            <h4 class="text-lg font-semibold mb-4">Support</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >FAQs</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Terms of Service</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <i class="fas fa-envelope mr-3 text-accent-yellow"></i>
+                <span class="text-green-100"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abd8dedbdbc4d9dfebc0c2d8cac5d8cadfc3c285ccc4dd85c2c5">[email&#160;protected]</a></span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone mr-3 text-accent-yellow"></i>
+                <span class="text-green-100">1800-XXX-XXXX (Toll Free)</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-map-marker-alt mr-3 text-accent-yellow"></i>
+                <span class="text-green-100">New Delhi, India</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div
+          class="border-t border-green-800 dark:border-gray-700 pt-8 text-center"
+        >
+          <p class="text-green-100">
+            &copy; 2024 KisanSathi - AI Assisted Farmer Support System. All
+            rights reserved. | Developed for Agricultural Empowerment
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      // Dark Mode Toggle Functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const themeToggleMobile = document.getElementById("themeToggleMobile");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      // Toggle theme function
+      function toggleTheme() {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      }
+
+      // Add click events to both toggles
+      themeToggle.addEventListener("click", toggleTheme);
+      themeToggleMobile.addEventListener("click", toggleTheme);
+
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("active");
+      });
+
+      // Smooth Scrolling
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Scroll Animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".fade-in").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          navbar.classList.add("navbar-scrolled");
+        } else {
+          navbar.classList.remove("navbar-scrolled");
+        }
+      });
+    </script>
+  </body>
+</html>

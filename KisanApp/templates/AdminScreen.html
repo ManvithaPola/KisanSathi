@@ -1,0 +1,531 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-50 {
+        background-color: #1e293b !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Card hover effect */
+      .action-card {
+        transition: all 0.3s ease;
+      }
+
+      .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+      }
+
+      .dark .action-card:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Stats card hover */
+      .stats-card {
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .stats-card:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Hero background */
+      .hero-section {
+        background: linear-gradient(135deg, rgba(27, 94, 32, 0.95), rgba(46, 125, 50, 0.9)),
+          url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&h=600&fit=crop') center/cover;
+      }
+
+      .dark .hero-section {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)),
+          url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&h=600&fit=crop') center/cover;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* User management card style */
+      .user-mgmt-card {
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      }
+
+      .dark .user-mgmt-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      }
+
+      .user-mgmt-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(46, 125, 50, 0.2);
+      }
+
+      .dark .user-mgmt-card:hover {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 hero-section">
+      <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            Welcome Admin
+          </h2>
+          <p class="text-xl md:text-2xl text-green-50 max-w-3xl mx-auto drop-shadow">
+            Manage experts, policies, prices, and system analytics efficiently.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary Statistics Cards -->
+    <section class="py-12 -mt-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Total Experts -->
+          <div
+            class="stats-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center border-t-4 border-blue-500"
+          >
+            <div class="flex justify-center mb-4">
+              <div
+                class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center"
+              >
+                <i class="fas fa-user-tie text-3xl text-blue-600 dark:text-blue-400"></i>
+              </div>
+            </div>
+            <div
+              class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2"
+            >
+              {{ total_experts }}
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">Total Experts</p>
+          </div>
+
+          <!-- Pending Approvals -->
+          <div
+            class="stats-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center border-t-4 border-orange-500"
+          >
+            <div class="flex justify-center mb-4">
+              <div
+                class="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center"
+              >
+                <i class="fas fa-hourglass-half text-3xl text-orange-600 dark:text-orange-400"></i>
+              </div>
+            </div>
+            <div
+              class="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2"
+            >
+              {{ pending_approvals }}
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">Pending Approvals</p>
+          </div>
+
+          <!-- Total Queries -->
+          <div
+            class="stats-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center border-t-4 border-purple-500"
+          >
+            <div class="flex justify-center mb-4">
+              <div
+                class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center"
+              >
+                <i class="fas fa-comments text-3xl text-purple-600 dark:text-purple-400"></i>
+              </div>
+            </div>
+            <div
+              class="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2"
+            >
+              {{ total_queries }}
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">Total Queries</p>
+          </div>
+
+          <!-- Total AI Verifications -->
+          <div
+            class="stats-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center border-t-4 border-green-500"
+          >
+            <div class="flex justify-center mb-4">
+              <div
+                class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center"
+              >
+                <i class="fas fa-check-circle text-3xl text-green-600 dark:text-green-400"></i>
+              </div>
+            </div>
+            <div
+              class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2"
+            >
+              {{ total_verifications }}
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">AI Verifications</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Action Cards -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <h2
+          class="text-3xl font-bold text-gray-900 dark:text-white mb-10 text-center"
+        >
+          Quick Actions
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Card 1: Approve Accounts -->
+          <div
+            class="action-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center"
+          >
+            <div
+              class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+            >
+              <i class="fas fa-user-check text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Approve Accounts
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+              Review and approve expert registrations.
+            </p>
+            <a
+              href="{% url 'ApproveAccount' %}"
+              class="inline-block px-6 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-all shadow-md hover:shadow-lg"
+            >
+              Review Now
+            </a>
+          </div>
+
+          <!-- Card 2: Update Prices -->
+          <div
+            class="action-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center"
+          >
+            <div
+              class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+            >
+              <i class="fas fa-dollar-sign text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Update Prices
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+              Manage and update crop market prices.
+            </p>
+            <a
+              href="{% url 'UpdatePrices' %}"
+              class="inline-block px-6 py-2.5 bg-green-600 dark:bg-green-500 text-white rounded-full font-semibold hover:bg-green-700 dark:hover:bg-green-600 transition-all shadow-md hover:shadow-lg"
+            >
+              Update Now
+            </a>
+          </div>
+
+          <!-- Card 3: Post Policies -->
+          <div
+            class="action-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center"
+          >
+            <div
+              class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+            >
+              <i class="fas fa-file-alt text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Post Policies
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+              Publish agricultural policies and announcements.
+            </p>
+            <a
+              href="{% url 'PostPolicies' %}"
+              class="inline-block px-6 py-2.5 bg-purple-600 dark:bg-purple-500 text-white rounded-full font-semibold hover:bg-purple-700 dark:hover:bg-purple-600 transition-all shadow-md hover:shadow-lg"
+            >
+              Post Now
+            </a>
+          </div>
+
+          <!-- Card 4: View Query Responses -->
+          <div
+            class="action-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center"
+          >
+            <div
+              class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+            >
+              <i class="fas fa-eye text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Query Responses
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+              Monitor farmer queries and expert responses.
+            </p>
+            <a
+              href="{% url 'ViewQueryResult' %}"
+              class="inline-block px-6 py-2.5 bg-orange-600 dark:bg-orange-500 text-white rounded-full font-semibold hover:bg-orange-700 dark:hover:bg-orange-600 transition-all shadow-md hover:shadow-lg"
+            >
+              View Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Management Section -->
+    <section class="py-16 bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <div class="container mx-auto px-4">
+        <h2
+          class="text-3xl font-bold text-gray-900 dark:text-white mb-10 text-center"
+        >
+          User Management
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+          <!-- Farmers List Card -->
+          <div
+            class="user-mgmt-card rounded-2xl shadow-xl p-10 text-center"
+          >
+            <div
+              class="w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl"
+            >
+              <i class="fas fa-users text-4xl text-white"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+              Registered Farmers
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 text-base">
+              View all registered farmers in the system. Monitor farmer accounts and activity.
+            </p>
+            <a
+              href="{% url 'ViewFarmers' %}"
+              class="inline-block px-10 py-3.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-full font-bold hover:from-teal-600 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <i class="fas fa-list mr-2"></i>
+              View Farmers
+            </a>
+          </div>
+
+          <!-- Approved Experts Card -->
+          <div
+            class="user-mgmt-card rounded-2xl shadow-xl p-10 text-center"
+          >
+            <div
+              class="w-24 h-24 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl"
+            >
+              <i class="fas fa-user-check text-4xl text-white"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+              Approved Experts
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 text-base">
+              View all approved agricultural experts. Manage expert accounts and credentials.
+            </p>
+            <a
+              href="{% url 'ViewApprovedExperts' %}"
+              class="inline-block px-10 py-3.5 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-full font-bold hover:from-indigo-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <i class="fas fa-clipboard-check mr-2"></i>
+              View Experts
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+          <p class="text-green-100 mb-2">© 2026 KisanSathi Admin Panel</p>
+          <p class="text-green-200 font-medium">
+            Secured Administrative Access
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+    </script>
+  </body>
+</html>

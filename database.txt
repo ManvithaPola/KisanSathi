@@ -1,0 +1,40 @@
+create database kisansathi;
+use kisansathi;
+
+create table farmers(username varchar(30) primary key,
+password varchar(30),
+contact varchar(12),
+email varchar(30),
+address varchar(40),
+intrested_crops varchar(500),
+approve varchar(30));
+
+create table experts(username varchar(30) primary key,
+password varchar(30),
+contact varchar(12),
+email varchar(30),
+address varchar(40),
+qualification varchar(50),
+description varchar(500),
+approve varchar(30));
+
+create table guides(expert_name varchar(30),
+guide_description varchar(600),
+filename varchar(50));
+
+create table query(farmer_name varchar(30),
+query varchar(600),
+response varchar(1000),
+query_date varchar(30));
+
+create table cropprices(crop_name varchar(50),
+price varchar(20),
+price_date varchar(30));
+
+create table schemes(policy_name varchar(100),
+policy_desc varchar(1000),
+info_type varchar(30),
+info_date varchar(30));
+
+
+

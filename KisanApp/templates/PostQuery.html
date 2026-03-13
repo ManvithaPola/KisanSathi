@@ -1,0 +1,523 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Query - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+                pale: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* ── Dark Mode ── */
+      .dark { background-color: #0b1120; color: #e2e8f0; }
+      .dark .nav-bg        { background-color: #0f172a !important; border-bottom-color: #1e293b !important; }
+      .dark .card-bg       { background-color: #1e293b !important; border-color: #334155 !important; }
+      .dark .section-bg    { background-color: #0b1120 !important; }
+      .dark .input-bg      { background-color: #1e293b !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+      .dark .input-bg::placeholder { color: #64748b !important; }
+      .dark .label-color   { color: #cbd5e1 !important; }
+      .dark .footer-bg     { background-color: #060c18 !important; }
+      .dark .info-panel    { background-color: #162032 !important; border-color: #334155 !important; }
+      .dark .icon-ring     { background-color: #0f2a10 !important; }
+      .dark .divider-soft  { border-color: #334155 !important; }
+      .dark .char-count    { color: #64748b !important; }
+      .dark .step-bg       { background-color: #162032 !important; border-color: #334155 !important; }
+
+      /* ── Toggle switch ── */
+      .toggle-switch {
+        width: 50px; height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px; position: relative;
+        cursor: pointer; flex-shrink: 0;
+        transition: background-color 0.3s ease;
+      }
+      .toggle-switch::after {
+        content: ""; position: absolute;
+        top: 3px; left: 3px;
+        width: 20px; height: 20px;
+        background-color: white; border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      }
+      .dark .toggle-switch { background-color: #2e7d32; }
+      .dark .toggle-switch::after { transform: translateX(24px); }
+
+      /* ── Hero ── */
+      .hero-section {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+        position: relative; overflow: hidden;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .dark .hero-section {
+        background: linear-gradient(135deg, #0a1f0b 0%, #0f2a10 60%, #112b12 100%);
+      }
+
+      /* ── Form card hover glow ── */
+      .form-card {
+        transition: box-shadow 0.3s ease;
+      }
+      .form-card:hover {
+        box-shadow: 0 24px 64px rgba(46, 125, 50, 0.1);
+      }
+      .dark .form-card:hover {
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+      }
+
+      /* ── Textarea resize handle color ── */
+      textarea { resize: vertical; }
+
+      /* ── Focus ring ── */
+      .field-input:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76,175,80,0.15);
+      }
+
+      /* ── Submit button ── */
+      .submit-btn {
+        background: linear-gradient(135deg, #1b5e20, #4caf50);
+        box-shadow: 0 4px 16px rgba(46,125,50,0.35);
+        transition: all 0.25s ease;
+      }
+      .submit-btn:hover {
+        box-shadow: 0 8px 24px rgba(46,125,50,0.45);
+        transform: translateY(-1px);
+      }
+      .submit-btn:active { transform: translateY(0); }
+
+      /* ── Alert fade ── */
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .alert-box { animation: slideDown 0.4s ease both; }
+
+      /* ── Step item ── */
+      .step-item {
+        transition: background-color 0.2s ease;
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .fade-up  { animation: fadeUp 0.6s ease both; }
+      .delay-1  { animation-delay: 0.1s; }
+      .delay-2  { animation-delay: 0.2s; }
+      .delay-3  { animation-delay: 0.3s; }
+
+      html { scroll-behavior: smooth; }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+
+    <!-- ════════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'FarmerDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section class="hero-section pt-16">
+      <div class="relative z-10 container mx-auto px-4 py-14 text-center">
+
+        <!-- Icon panel -->
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 fade-up"
+             style="background:rgba(255,255,255,0.12); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.2);">
+          <i class="fas fa-paper-plane text-2xl text-white"></i>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="flex items-center justify-center gap-2 text-green-200 text-xs mb-4 fade-up">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span class="text-white font-medium">Submit Query</span>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 fade-up delay-1"
+            style="font-family:'Lora',serif;">
+          Submit Agricultural Query
+        </h2>
+
+        <!-- Subtitle -->
+        <p class="text-green-100 max-w-xl mx-auto text-sm md:text-base leading-relaxed fade-up delay-2">
+          Ask certified agricultural experts and receive verified guidance
+          for your farming challenges — backed by the Government of India.
+        </p>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-6 fade-up delay-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-user-check"></i> Expert Reviewed
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-bolt"></i> Fast Response
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-shield-alt"></i> Secure Submission
+          </span>
+        </div>
+      </div>
+
+      <!-- Wave -->
+      <div class="overflow-hidden leading-none" style="height:50px;">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none" class="w-full h-full">
+          <path d="M0,30 C480,60 960,0 1440,30 L1440,50 L0,50 Z"
+                fill="#f9fafb" class="dark:fill-[#0b1120]"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════════════════ -->
+    <section class="section-bg py-12 bg-gray-50 dark:bg-[#0b1120] min-h-screen">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+
+          <!-- ── Success / Error Alert ── -->
+          {% if data %}
+          <div id="alertBox" class="alert-box mb-6">
+            <div class="flex items-start gap-3 px-5 py-4 rounded-xl border
+                        {% if 'success' in data|lower or 'submitted' in data|lower or 'sent' in data|lower %}
+                          bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300
+                        {% else %}
+                          bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300
+                        {% endif %}">
+              <div class="flex-shrink-0 mt-0.5">
+                {% if 'success' in data|lower or 'submitted' in data|lower or 'sent' in data|lower %}
+                  <i class="fas fa-check-circle text-green-500 dark:text-green-400 text-lg"></i>
+                {% else %}
+                  <i class="fas fa-exclamation-circle text-red-500 dark:text-red-400 text-lg"></i>
+                {% endif %}
+              </div>
+              <div class="flex-1 text-sm font-medium leading-relaxed">
+                {{ data|safe }}
+              </div>
+              <button onclick="document.getElementById('alertBox').remove()"
+                      class="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity ml-2 mt-0.5">
+                <i class="fas fa-times text-sm"></i>
+              </button>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- ── Query Form Card ── -->
+          <div class="form-card card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] fade-up">
+
+            <!-- Card Header -->
+            <div class="px-7 pt-7 pb-5 flex items-center gap-4">
+              <div class="icon-ring w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-comments text-primary-dark dark:text-green-400 text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-base"
+                    style="font-family:'Lora',serif;">Query Submission Form</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  All fields marked with <span class="text-red-400">*</span> are required.
+                </p>
+              </div>
+            </div>
+
+            <div class="divider-soft border-t border-gray-100 dark:border-[#334155] mx-7"></div>
+
+            <!-- Form Body -->
+            <form method="POST" action="{% url 'PostQueryAction' %}" class="px-7 py-6 space-y-5">
+              {% csrf_token %}
+
+              <!-- Query Title field -->
+              <div>
+                <label for="queryTitle"
+                       class="label-color block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                  <i class="fas fa-heading mr-1 text-primary-light text-xs"></i>
+                  Query Title
+                  <span class="text-gray-400 dark:text-gray-500 font-normal ml-1">(Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  id="queryTitle"
+                  name="title"
+                  placeholder="e.g. Yellowing leaves on wheat crop"
+                  class="field-input input-bg w-full px-4 py-3 rounded-xl border border-gray-200 bg-white dark:bg-[#1e293b] dark:border-[#334155] dark:text-gray-100 dark:placeholder-gray-500 text-gray-700 text-sm shadow-sm transition-all"
+                />
+              </div>
+
+              <!-- Query Textarea -->
+              <div>
+                <label for="queryText"
+                       class="label-color block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                  <i class="fas fa-edit mr-1 text-primary-light text-xs"></i>
+                  Your Query <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                  <textarea
+                    id="queryText"
+                    name="t1"
+                    rows="6"
+                    required
+                    maxlength="2000"
+                    placeholder="Describe your farming issue in detail (crop type, symptoms, soil condition, weather, etc.)"
+                    oninput="updateCounter(this)"
+                    class="field-input input-bg w-full px-4 py-3 rounded-xl border border-gray-200 bg-white dark:bg-[#1e293b] dark:border-[#334155] dark:text-gray-100 dark:placeholder-gray-500 text-gray-700 text-sm shadow-sm transition-all leading-relaxed"
+                  ></textarea>
+                </div>
+                <!-- Character counter -->
+                <div class="flex items-center justify-between mt-1.5 px-1">
+                  <p class="text-xs text-gray-400 dark:text-gray-500">
+                    <i class="fas fa-info-circle mr-0.5"></i>
+                    Be specific — mention crop name, problem area, and duration.
+                  </p>
+                  <span id="charCount"
+                        class="char-count text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">
+                    0 / 2000
+                  </span>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  class="submit-btn w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm">
+                  <i class="fas fa-paper-plane text-xs"></i>
+                  Submit to Experts
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- ── Government Notice / Info Panel ── -->
+          <div class="info-panel mt-6 bg-amber-50 dark:bg-[#162032] border border-amber-200 dark:border-[#334155] rounded-2xl px-6 py-5 fade-up delay-1">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="fas fa-exclamation-triangle text-amber-600 dark:text-amber-400 text-sm"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-800 dark:text-amber-300 text-sm mb-1"
+                    style="font-family:'Lora',serif;">
+                  Government Advisory Notice
+                </h4>
+                <p class="text-amber-700 dark:text-amber-400 text-xs leading-relaxed">
+                  Please ensure accurate and complete details in your query for a faster and more
+                  precise expert response. Queries are typically reviewed and answered within
+                  <strong>24–48 hours</strong> by certified agricultural officers.
+                  Misuse of this service may result in account suspension as per Government IT Policy.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── How It Works ── -->
+          <div class="mt-6 fade-up delay-2">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-1 h-5 rounded-full bg-primary-light"></div>
+              <h3 class="font-semibold text-gray-700 dark:text-gray-300 text-sm uppercase tracking-wider"
+                  style="font-family:'Lora',serif;">
+                How It Works
+              </h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+              <!-- Step 1 -->
+              <div class="step-item step-bg bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-xl p-4 text-center">
+                <div class="w-10 h-10 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-pen text-primary-dark dark:text-green-400 text-sm"></i>
+                </div>
+                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">1. Submit Query</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">Describe your farming issue clearly and in detail.</p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="step-item step-bg bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-xl p-4 text-center">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-user-tie text-blue-600 dark:text-blue-400 text-sm"></i>
+                </div>
+                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">2. Expert Reviews</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">Certified officers review your query within 24–48 hrs.</p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="step-item step-bg bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-xl p-4 text-center">
+                <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center mx-auto mb-3">
+                  <i class="fas fa-comment-dots text-purple-600 dark:text-purple-400 text-sm"></i>
+                </div>
+                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">3. Get Response</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">View expert responses in your "Query Responses" section.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+
+          <p class="text-green-300 font-medium text-sm">Government of India</p>
+
+          <div
+            class="mt-4 flex items-center justify-center space-x-4 text-green-200 text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lock"></i> SSL Secured
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-shield-alt"></i> Government Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════
+         SCRIPTS
+    ════════════════════════════════════════════ -->
+    <script>
+      // ── Dark Mode ──
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("theme") || "light";
+      if (saved === "dark") html.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+      });
+
+      // ── Character Counter ──
+      function updateCounter(textarea) {
+        const count   = textarea.value.length;
+        const max     = textarea.getAttribute("maxlength") || 2000;
+        const display = document.getElementById("charCount");
+        display.textContent = count + " / " + max;
+        if (count > max * 0.9) {
+          display.style.color = "#f59e0b";
+        } else {
+          display.style.color = "";
+        }
+      }
+
+      // ── Auto-dismiss alert after 4 seconds ──
+      const alertBox = document.getElementById("alertBox");
+      if (alertBox) {
+        setTimeout(() => {
+          alertBox.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          alertBox.style.opacity    = "0";
+          alertBox.style.transform  = "translateY(-8px)";
+          setTimeout(() => alertBox.remove(), 600);
+        }, 4000);
+      }
+    </script>
+  </body>
+</html>

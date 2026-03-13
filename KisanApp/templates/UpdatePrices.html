@@ -1,0 +1,696 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Prices - KisanSathi Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-50 {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-100 {
+        background-color: #334155 !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .border-gray-300 {
+        border-color: #475569 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Hero background */
+      .hero-section {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(27, 94, 32, 0.95),
+            rgba(46, 125, 50, 0.9)
+          ),
+          url("https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=1920&h=600&fit=crop")
+            center/cover;
+      }
+
+      .dark .hero-section {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(15, 23, 42, 0.95),
+            rgba(30, 41, 59, 0.9)
+          ),
+          url("https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=1920&h=600&fit=crop")
+            center/cover;
+      }
+
+      /* Form card animation */
+      .form-card {
+        transition: all 0.3s ease;
+      }
+
+      .form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(46, 125, 50, 0.15);
+      }
+
+      .dark .form-card:hover {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Input focus styles */
+      .custom-input:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+      }
+
+      .dark .custom-input:focus {
+        border-color: #66bb6a;
+        box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.2);
+      }
+
+      /* Select dropdown styling */
+      .custom-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234caf50'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1.5em 1.5em;
+      }
+
+      /* Button gradient animation */
+      .gradient-button {
+        background: linear-gradient(135deg, #2e7d32, #4caf50);
+        transition: all 0.3s ease;
+      }
+
+      .gradient-button:hover {
+        background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+      }
+
+      /* Alert animations */
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .alert-box {
+        animation: slideIn 0.5s ease-out;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Info panel hover effect */
+      .info-panel {
+        transition: all 0.3s ease;
+      }
+
+      .info-panel:hover {
+        transform: scale(1.02);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back to Dashboard Button -->
+            <a
+              href="{% url 'AdminDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 hero-section">
+      <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+          <div class="mb-6">
+            <i class="fas fa-dollar-sign text-6xl drop-shadow-lg"></i>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            Update Crop Market Prices
+          </h2>
+          <p
+            class="text-xl md:text-2xl text-green-50 max-w-3xl mx-auto drop-shadow"
+          >
+            Manage and update current agricultural market prices efficiently.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Success/Error Message Section -->
+    {% if messages %}
+    <section class="py-8 -mt-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+          {% for message in messages %}
+          <div
+            class="alert-box bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-200 p-6 rounded-lg shadow-lg"
+          >
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-3xl mr-4"></i>
+              <div>
+                <p class="font-bold text-lg mb-1">Success!</p>
+                <p>{{ message }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Price Update Form Section -->
+    <section class="py-12 {% if not data %}-mt-16{% endif %}">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+          <!-- Form Card -->
+          <div
+            class="form-card bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-10"
+          >
+            <div class="text-center mb-8">
+              <div
+                class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+              >
+                <i class="fas fa-edit text-3xl text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-800 dark:text-white">
+                Update Price Information
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 mt-2">
+                Select a crop and enter the new market price
+              </p>
+            </div>
+
+            <form
+              action="{% url 'UpdatePricesAction' %}"
+              method="POST"
+              class="space-y-6"
+            >
+              {% csrf_token %}
+
+              <!-- Crop Name Dropdown -->
+              <div>
+                <label
+                  for="cropName"
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  <i class="fas fa-seedling mr-2 text-green-600"></i>
+                  Select Crop
+                </label>
+                <div class="relative">{{ data1|safe }}</div>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  Choose the crop you want to update
+                </p>
+              </div>
+
+              <!-- Current Price Display (if available) -->
+              {% if current_price %}
+              <div
+                class="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p
+                      class="text-sm text-blue-700 dark:text-blue-300 font-medium"
+                    >
+                      Current Price
+                    </p>
+                    <p
+                      class="text-2xl font-bold text-blue-900 dark:text-blue-100 mt-1"
+                    >
+                      ₹{{ current_price }}
+                    </p>
+                  </div>
+                  <i class="fas fa-info-circle text-3xl text-blue-500"></i>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- New Price Input -->
+              <div>
+                <label
+                  for="newPrice"
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  <i class="fas fa-rupee-sign mr-2 text-green-600"></i>
+                  New Price (₹)
+                </label>
+                <div class="relative">
+                  <span
+                    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 text-lg font-bold"
+                  >
+                    ₹
+                  </span>
+                  <input
+                    type="number"
+                    id="newPrice"
+                    name="t2"
+                    step="0.01"
+                    min="0"
+                    required
+                    placeholder="Enter new price"
+                    class="custom-input w-full pl-10 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+                  />
+                </div>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  Enter the updated market price per unit
+                </p>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-4">
+                <button
+                  type="submit"
+                  class="gradient-button w-full py-4 text-white font-bold rounded-lg shadow-lg flex items-center justify-center space-x-2 text-lg"
+                >
+                  <i class="fas fa-check-circle"></i>
+                  <span>Update Price</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info Panel -->
+    <section class="py-8 pb-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+          <div
+            class="info-panel bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900 dark:to-blue-900 border-l-4 border-green-500 rounded-lg p-6 shadow-md"
+          >
+            <div class="flex items-start">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-yellow-400 dark:bg-yellow-600 rounded-full flex items-center justify-center mr-4"
+              >
+                <i
+                  class="fas fa-lightbulb text-xl text-yellow-900 dark:text-yellow-100"
+                ></i>
+              </div>
+              <div>
+                <h4
+                  class="text-lg font-bold text-gray-800 dark:text-white mb-2"
+                >
+                  Important Information
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300">
+                  Ensure price updates are based on verified market data from
+                  trusted agricultural sources. Always cross-check prices with
+                  official government agriculture portals before updating.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center"
+            >
+              <i class="fas fa-chart-line text-2xl text-green-600 mb-2"></i>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Market Updates
+              </p>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center"
+            >
+              <i class="fas fa-shield-alt text-2xl text-blue-600 mb-2"></i>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Verified Sources
+              </p>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center"
+            >
+              <i class="fas fa-clock text-2xl text-purple-600 mb-2"></i>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Real-Time Data
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Updated Crop Prices Section -->
+    <section class="py-12 pb-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div class="flex items-center mb-6">
+              <i class="fas fa-chart-bar text-3xl text-green-600 mr-4"></i>
+              <h3 class="text-2xl font-bold text-gray-800 dark:text-white">
+                Recently Updated Crop Prices
+              </h3>
+            </div>
+
+            {% if prices %}
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr
+                    class="bg-gray-100 dark:bg-gray-700 border-b-2 border-green-600"
+                  >
+                    <th
+                      class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase"
+                    >
+                      Crop Name
+                    </th>
+                    <th
+                      class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase"
+                    >
+                      Price (₹)
+                    </th>
+                    <th
+                      class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase"
+                    >
+                      Last Updated
+                    </th>
+                    <th
+                      class="px-6 py-4 text-center text-sm font-bold text-gray-700 dark:text-gray-300 uppercase"
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  {% for item in prices %}
+                  <tr
+                    class="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                  >
+                    <!-- Crop -->
+                    <td class="px-6 py-4">
+                      <div class="flex items-center">
+                        <i class="fas fa-seedling text-green-600 mr-3"></i>
+                        <span
+                          class="font-semibold text-gray-900 dark:text-white"
+                        >
+                          {{ item.crop }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Price -->
+                    <td
+                      class="px-6 py-4 text-gray-700 dark:text-gray-300 font-bold"
+                    >
+                      ₹{{ item.price }}
+                    </td>
+
+                    <!-- Date -->
+                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                      <i class="fas fa-calendar-alt mr-2 text-green-600"></i>
+                      {{ item.date }}
+                    </td>
+
+                    <!-- Status -->
+                    <td class="px-6 py-4 text-center">
+                      <span
+                        class="inline-block px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-semibold"
+                      >
+                        <i class="fas fa-check-circle mr-1"></i>
+                        Active
+                      </span>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-12">
+              <i
+                class="fas fa-inbox text-6xl text-gray-400 dark:text-gray-600 mb-4"
+              ></i>
+              <p class="text-xl font-semibold text-gray-600 dark:text-gray-400">
+                No Crop Prices Updated Yet
+              </p>
+              <p class="text-gray-500 dark:text-gray-500 mt-2">
+                Updated crop prices will appear here.
+              </p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+          <p class="text-green-100 mb-2">© 2026 KisanSathi Admin Panel</p>
+          <p class="text-green-200 font-medium">
+            Secured Administrative Access
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+
+      // Auto-hide alert after 5 seconds
+      const alertBox = document.querySelector(".alert-box");
+      if (alertBox) {
+        setTimeout(() => {
+          alertBox.style.transition = "opacity 0.5s ease";
+          alertBox.style.opacity = "0";
+          setTimeout(() => {
+            alertBox.remove();
+          }, 500);
+        }, 5000);
+      }
+
+      // Form validation
+      const form = document.querySelector("form");
+      const priceInput = document.getElementById("newPrice");
+
+      form.addEventListener("submit", (e) => {
+        const price = parseFloat(priceInput.value);
+
+        if (isNaN(price) || price <= 0) {
+          e.preventDefault();
+          alert("Please enter a valid price greater than 0");
+          priceInput.focus();
+          return false;
+        }
+      });
+
+      // Add custom styling to the injected dropdown
+      window.addEventListener("DOMContentLoaded", () => {
+        const selectElement = document.querySelector("select");
+        if (selectElement) {
+          selectElement.classList.add(
+            "custom-select",
+            "custom-input",
+            "w-full",
+            "px-4",
+            "py-3",
+            "border-2",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "rounded-lg",
+            "bg-white",
+            "dark:bg-gray-700",
+            "text-gray-800",
+            "dark:text-gray-200",
+            "transition-all",
+          );
+          selectElement.setAttribute("required", "true");
+        }
+      });
+    </script>
+  </body>
+</html>

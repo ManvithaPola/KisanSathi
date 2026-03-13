@@ -1,0 +1,629 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disease Detection - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+                pale: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* ── Dark Mode ── */
+      .dark { background-color: #0b1120; color: #e2e8f0; }
+      .dark .nav-bg       { background-color: #0f172a !important; border-bottom-color: #1e293b !important; }
+      .dark .card-bg      { background-color: #1e293b !important; border-color: #334155 !important; }
+      .dark .section-bg   { background-color: #0b1120 !important; }
+      .dark .footer-bg    { background-color: #060c18 !important; }
+      .dark .upload-zone  { background-color: #162032 !important; border-color: #334155 !important; }
+      .dark .upload-zone:hover { border-color: #4caf50 !important; background-color: #0f2a10 !important; }
+      .dark .upload-zone.drag-over { border-color: #4caf50 !important; background-color: #0f2a10 !important; }
+      .dark .result-card  { background-color: #1e293b !important; border-color: #334155 !important; }
+      .dark .disease-box  { background-color: #0f2a10 !important; border-color: #1a4a1e !important; }
+      .dark .fert-box     { background-color: #162032 !important; border-color: #334155 !important; }
+      .dark .divider-soft { border-color: #334155 !important; }
+      .dark .tip-box      { background-color: #1c1a0a !important; border-color: #3d3510 !important; }
+      .dark .empty-state  { background-color: #1e293b !important; border-color: #334155 !important; }
+
+      /* ── Toggle switch ── */
+      .toggle-switch {
+        width: 50px; height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px; position: relative;
+        cursor: pointer; flex-shrink: 0;
+        transition: background-color 0.3s ease;
+      }
+      .toggle-switch::after {
+        content: ""; position: absolute;
+        top: 3px; left: 3px;
+        width: 20px; height: 20px;
+        background-color: white; border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      }
+      .dark .toggle-switch { background-color: #2e7d32; }
+      .dark .toggle-switch::after { transform: translateX(24px); }
+
+      /* ── Hero ── */
+      .hero-section {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+        position: relative; overflow: hidden;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .dark .hero-section {
+        background: linear-gradient(135deg, #0a1f0b 0%, #0f2a10 60%, #112b12 100%);
+      }
+
+      /* ── Upload Zone ── */
+      .upload-zone {
+        border: 2px dashed #d1d5db;
+        border-radius: 16px;
+        background-color: #f9fafb;
+        transition: all 0.25s ease;
+        cursor: pointer;
+      }
+      .upload-zone:hover,
+      .upload-zone.drag-over {
+        border-color: #4caf50;
+        background-color: #f0fdf4;
+      }
+
+      /* ── Submit button ── */
+      .submit-btn {
+        background: linear-gradient(135deg, #1b5e20, #4caf50);
+        box-shadow: 0 4px 16px rgba(46,125,50,0.35);
+        transition: all 0.25s ease;
+      }
+      .submit-btn:hover {
+        box-shadow: 0 8px 24px rgba(46,125,50,0.45);
+        transform: translateY(-1px);
+      }
+      .submit-btn:active { transform: translateY(0); }
+      .submit-btn:disabled {
+        opacity: 0.6; cursor: not-allowed; transform: none;
+        box-shadow: none;
+      }
+
+      /* ── Result card ── */
+      .result-card {
+        animation: slideUp 0.5s ease both;
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(28px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Image preview ── */
+      .preview-img {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .preview-img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+      }
+
+      /* ── Scan animation ── */
+      @keyframes scan {
+        0%   { top: 0; }
+        100% { top: 100%; }
+      }
+      .scan-line {
+        position: absolute; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #4caf50, transparent);
+        animation: scan 2s linear infinite;
+        border-radius: 1px;
+      }
+
+      /* ── Spinner ── */
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .spinner { animation: spin 0.8s linear infinite; }
+
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .fade-up  { animation: fadeUp 0.6s ease both; }
+      .delay-1  { animation-delay: 0.1s; }
+      .delay-2  { animation-delay: 0.2s; }
+
+      html { scroll-behavior: smooth; }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+
+    <!-- ════════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'FarmerDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section class="hero-section pt-16">
+      <div class="relative z-10 container mx-auto px-4 py-14 text-center">
+
+        <!-- Icon panel -->
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 fade-up"
+             style="background:rgba(255,255,255,0.12); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.2);">
+          <i class="fas fa-microscope text-2xl text-white"></i>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="flex items-center justify-center gap-2 text-green-200 text-xs mb-4 fade-up">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span>AI Tools</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span class="text-white font-medium">Disease Detection</span>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 fade-up delay-1"
+            style="font-family:'Lora',serif;">
+          AI Crop Disease Detection
+        </h2>
+
+        <!-- Subtitle -->
+        <p class="text-green-100 max-w-xl mx-auto text-sm md:text-base leading-relaxed fade-up delay-2">
+          Upload a crop leaf image and our AI model will identify the disease
+          and recommend the appropriate fertilizer treatment.
+        </p>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-6 fade-up delay-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-robot"></i> AI Powered
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-bolt"></i> Instant Analysis
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-flask"></i> Expert Recommendations
+          </span>
+        </div>
+      </div>
+
+      <!-- Wave -->
+      <div class="overflow-hidden leading-none" style="height:50px;">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none" class="w-full h-full">
+          <path d="M0,30 C480,60 960,0 1440,30 L1440,50 L0,50 Z"
+                fill="#f9fafb" class="dark:fill-[#0b1120]"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════════════════ -->
+    <section class="section-bg py-12 bg-gray-50 dark:bg-[#0b1120] min-h-screen">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto">
+
+          <!-- ── Upload Card ── -->
+          <div class="card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] fade-up">
+
+            <!-- Card Header -->
+            <div class="px-7 pt-7 pb-5 flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-leaf text-primary-dark dark:text-green-400 text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-base"
+                    style="font-family:'Lora',serif;">Upload Crop Leaf Image</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Supported formats: JPG, PNG, JPEG · Max size: 10MB
+                </p>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 dark:border-[#334155] mx-7"></div>
+
+            <!-- Form -->
+            <form method="POST" enctype="multipart/form-data"
+                  action="{% url 'Disease' %}"
+                  id="uploadForm"
+                  class="px-7 py-6 space-y-5">
+              {% csrf_token %}
+
+              <!-- Drag-and-drop upload zone -->
+              <div>
+                <div class="upload-zone relative flex flex-col items-center justify-center gap-3 px-6 py-10 text-center"
+                     id="dropZone"
+                     onclick="document.getElementById('imageInput').click()">
+
+                  <!-- Upload icon -->
+                  <div class="w-14 h-14 rounded-2xl bg-white dark:bg-[#162032] shadow-sm border border-gray-200 dark:border-[#334155] flex items-center justify-center" id="uploadIcon">
+                    <i class="fas fa-upload text-primary-dark dark:text-green-400 text-xl"></i>
+                  </div>
+
+                  <!-- Preview image (hidden by default) -->
+                  <img id="previewImg" src="#" alt="Preview"
+                       class="hidden w-48 h-48 object-cover rounded-xl shadow-md preview-img" />
+
+                  <div id="uploadText">
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      Click or drag image to upload
+                    </p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                      Drop your crop leaf photo here for AI analysis
+                    </p>
+                  </div>
+
+                  <p id="fileName"
+                     class="hidden text-xs font-medium text-primary-dark dark:text-green-400 bg-primary-pale dark:bg-green-900/20 px-3 py-1 rounded-full">
+                  </p>
+
+                  <!-- Hidden actual file input -->
+                  <input
+                    type="file"
+                    id="imageInput"
+                    name="t1"
+                    accept="image/*"
+                    class="hidden"
+                    onchange="handleFileSelect(this)"
+                  />
+                </div>
+              </div>
+
+              <!-- How-to tip -->
+              <div class="tip-box bg-amber-50 dark:bg-[#1c1a0a] border border-amber-100 dark:border-[#3d3510] rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <i class="fas fa-lightbulb text-amber-500 dark:text-amber-400 text-sm mt-0.5 flex-shrink-0"></i>
+                <p class="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
+                  <strong>Pro tip:</strong> For best results, photograph a single affected leaf in natural daylight,
+                  ensuring the discoloration or spots are clearly visible. Avoid blurry or dark images.
+                </p>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                id="submitBtn"
+                class="submit-btn w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm"
+                disabled>
+                <i class="fas fa-search text-xs" id="btnIcon"></i>
+                <span id="btnText">Select an Image First</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- ════════════════════════════════════════════
+               RESULT DISPLAY SECTION
+          ════════════════════════════════════════════ -->
+          {% if data %}
+          <div class="result-card mt-8 card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155]">
+
+            <!-- Result Header -->
+            <div class="px-7 pt-7 pb-5 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-microscope text-primary-dark dark:text-green-400 text-lg"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-800 dark:text-white text-base"
+                      style="font-family:'Lora',serif;">AI Analysis Result</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Detection complete — review the findings below
+                  </p>
+                </div>
+              </div>
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-100 dark:border-green-900/40">
+                <i class="fas fa-check-circle text-[10px]"></i> Analysed
+              </span>
+            </div>
+
+            <div class="border-t border-gray-100 dark:border-[#334155] mx-7"></div>
+
+            <div class="px-7 py-6 space-y-5">
+
+              <!-- Uploaded image display -->
+              {% if img %}
+              <div>
+                <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
+                  <i class="fas fa-image mr-1 text-primary-light"></i> Analysed Image
+                </p>
+                <div class="relative inline-block w-full overflow-hidden rounded-xl">
+                  <div class="relative">
+                    <img src="data:image/png;base64,{{ img }}"
+                         alt="Uploaded Crop Image"
+                         class="preview-img w-full max-h-72 object-contain rounded-xl shadow-md bg-gray-50 dark:bg-[#162032]" />
+                    <!-- Scan overlay animation -->
+                    <div class="absolute inset-0 overflow-hidden rounded-xl pointer-events-none" id="scanOverlay">
+                      <div class="scan-line"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Disease Detection Result -->
+              <div class="disease-box bg-green-50 dark:bg-[#0f2a10] border border-green-100 dark:border-[#1a4a1e] rounded-xl px-5 py-4">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-8 h-8 rounded-lg bg-white dark:bg-green-900/30 flex items-center justify-center">
+                    <i class="fas fa-bug text-primary-dark dark:text-green-400 text-sm"></i>
+                  </div>
+                  <p class="text-xs font-bold text-primary-dark dark:text-green-400 uppercase tracking-widest">
+                    Detection Result
+                  </p>
+                </div>
+                <div class="text-gray-800 dark:text-gray-100 text-sm leading-relaxed font-medium">
+                  {{ data|safe }}
+                </div>
+              </div>
+
+              <!-- Verified note -->
+              <div class="flex items-center justify-between text-xs pt-1">
+                <span class="text-gray-400 dark:text-gray-500 flex items-center gap-1">
+                  <i class="fas fa-robot text-primary-light"></i>
+                  Generated by KisanSathi AI Model
+                </span>
+                <span class="text-green-600 dark:text-green-400 flex items-center gap-1 font-medium">
+                  <i class="fas fa-shield-alt text-[10px]"></i>
+                  Verified Analysis
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          {% else %}
+
+          <!-- ── Empty / Pre-upload State ── -->
+          <div class="empty-state mt-8 bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-2xl shadow-sm px-8 py-12 text-center fade-up delay-1">
+            <div class="w-16 h-16 rounded-2xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-leaf text-primary-dark dark:text-green-400 text-2xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-600 dark:text-gray-300 text-base mb-2"
+                style="font-family:'Lora',serif;">
+              Ready for Analysis
+            </h4>
+            <p class="text-gray-400 dark:text-gray-500 text-sm leading-relaxed max-w-sm mx-auto">
+              Upload a crop leaf image above to begin AI-powered disease analysis.
+              Results will appear here instantly.
+            </p>
+
+            <!-- Feature highlights -->
+            <div class="grid grid-cols-3 gap-3 mt-6">
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i class="fas fa-eye text-primary-light text-lg mb-2 block"></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Disease ID</p>
+              </div>
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i class="fas fa-flask text-blue-500 text-lg mb-2 block"></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Fertilizer Tip</p>
+              </div>
+              <div class="bg-gray-50 dark:bg-[#162032] rounded-xl p-3">
+                <i class="fas fa-bolt text-amber-500 text-lg mb-2 block"></i>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Instant Result</p>
+              </div>
+            </div>
+          </div>
+
+          {% endif %}
+
+          <!-- Info note -->
+          <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-6">
+            <i class="fas fa-info-circle mr-1"></i>
+            AI results are indicative. Consult a certified agricultural expert for critical decisions.
+          </p>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+
+          <p class="text-green-300 font-medium text-sm">Government of India</p>
+
+          <div
+            class="mt-4 flex items-center justify-center space-x-4 text-green-200 text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lock"></i> SSL Secured
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-shield-alt"></i> Government Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════
+         SCRIPTS
+    ════════════════════════════════════════════ -->
+    <script>
+      // ── Dark Mode ──
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("theme") || "light";
+      if (saved === "dark") html.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+      });
+
+      // ── File Select Handler ──
+      function handleFileSelect(input) {
+        const file       = input.files[0];
+        const submitBtn  = document.getElementById("submitBtn");
+        const btnText    = document.getElementById("btnText");
+        const btnIcon    = document.getElementById("btnIcon");
+        const previewImg = document.getElementById("previewImg");
+        const uploadIcon = document.getElementById("uploadIcon");
+        const uploadText = document.getElementById("uploadText");
+        const fileNameEl = document.getElementById("fileName");
+
+        if (file && file.type.startsWith("image/")) {
+          // Show preview
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            previewImg.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+
+          // Hide default upload icon, show file name
+          uploadIcon.classList.add("hidden");
+          uploadText.innerHTML = `<p class="text-sm font-semibold text-primary-dark dark:text-green-400">Image Ready for Analysis</p>`;
+          fileNameEl.textContent = file.name.length > 30 ? file.name.substring(0, 30) + "..." : file.name;
+          fileNameEl.classList.remove("hidden");
+
+          // Enable submit
+          submitBtn.disabled = false;
+          btnText.textContent = "Detect Disease";
+          btnIcon.className   = "fas fa-search text-xs";
+        }
+      }
+
+      // ── Drag and Drop ──
+      const dropZone = document.getElementById("dropZone");
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("drag-over");
+      });
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("drag-over");
+      });
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("drag-over");
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          const input    = document.getElementById("imageInput");
+          const dt       = new DataTransfer();
+          dt.items.add(file);
+          input.files    = dt.files;
+          handleFileSelect(input);
+        }
+      });
+
+      // ── Form submit — show spinner ──
+      document.getElementById("uploadForm").addEventListener("submit", function () {
+        const btnText  = document.getElementById("btnText");
+        const btnIcon  = document.getElementById("btnIcon");
+        const submitBtn = document.getElementById("submitBtn");
+        btnText.textContent  = "Analysing...";
+        btnIcon.className    = "fas fa-circle-notch spinner text-xs";
+        submitBtn.disabled   = true;
+      });
+
+      // ── Auto-stop scan line after 3s ──
+      const scanOverlay = document.getElementById("scanOverlay");
+      if (scanOverlay) {
+        setTimeout(() => {
+          const line = scanOverlay.querySelector(".scan-line");
+          if (line) line.style.animation = "none";
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

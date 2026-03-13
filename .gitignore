@@ -1,0 +1,4 @@
+model/fertilizer.pckl
+*.pckl
+*.h5
+*.npy

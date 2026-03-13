@@ -1,0 +1,435 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expert Dashboard - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-50 {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-100 {
+        background-color: #334155 !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .text-gray-500 {
+        color: #64748b !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .border-gray-300 {
+        border-color: #334155 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Card hover effect */
+      .action-card {
+        transition: all 0.3s ease;
+      }
+
+      .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+      }
+
+      .dark .action-card:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Activity item styling */
+      .activity-item {
+        border-left: 3px solid #2e7d32;
+        transition: all 0.3s ease;
+      }
+
+      .activity-item:hover {
+        border-left-color: #1b5e20;
+        background-color: #f9fafb;
+      }
+
+      .dark .activity-item {
+        border-left-color: #4caf50;
+      }
+
+      .dark .activity-item:hover {
+        background-color: #1e293b;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+            <!-- Back button -->
+            <a
+              href="{% url 'ExpertDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+            <!-- Logout button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white dark:hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ================= PROFILE HEADER SECTION ================= -->
+    <section
+      class="pt-32 pb-16 bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-900 dark:to-gray-800"
+    >
+      <div class="container mx-auto px-4 max-w-5xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <div class="flex items-center space-x-6">
+            <div
+              class="w-24 h-24 bg-primary-light dark:bg-primary-dark rounded-full flex items-center justify-center"
+            >
+              <i class="fas fa-user text-4xl text-white"></i>
+            </div>
+
+            <div>
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                {{ expert_details.username }}
+              </h2>
+              <p class="text-gray-600 dark:text-gray-400">
+                {{ expert_details.email }}
+              </p>
+              <p class="text-gray-600 dark:text-gray-400">
+                {{ expert_details.contact }}
+              </p>
+              <p class="text-gray-600 dark:text-gray-400">
+                Qualification: {{ expert_details.qualification }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PASSWORD CHANGE SECTION ================= -->
+    <section class="py-16">
+      <div class="container mx-auto px-4 max-w-4xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            Change Password
+          </h3>
+
+          <form method="post" action="{% url 'ChangeExpertPassword' %}">
+            {% csrf_token %}
+
+            <div class="space-y-5">
+              <input
+                type="password"
+                name="current_password"
+                placeholder="Current Password"
+                required
+                class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              />
+
+              <input
+                type="password"
+                name="new_password"
+                placeholder="New Password"
+                required
+                class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              />
+
+              <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm New Password"
+                required
+                class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              />
+            </div>
+
+            <div class="mt-6">
+              <button
+                type="submit"
+                class="px-8 py-3 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full font-semibold hover:bg-primary transition-all"
+              >
+                Update Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RESPONDED QUERIES ================= -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-900">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <h2
+          class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center"
+        >
+          Responded Queries
+        </h2>
+
+        <div class="space-y-4">
+          {% for q in responded_queries %}
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <p class="font-semibold text-gray-800 dark:text-white">
+              Farmer: {{ q.farmer_name }}
+            </p>
+            <p class="font-semibold text-gray-800 dark:text-white">
+              Query: {{ q.query }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              Response: {{ q.response|truncatewords:20 }}
+            </p>
+            <p class="text-xs text-gray-500 mt-2">{{ q.query_date }}</p>
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-500">No responded queries yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= UPLOADED GUIDES ================= -->
+    <section class="py-16">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <h2
+          class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center"
+        >
+          Uploaded Guides
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for guide in uploaded_guides %}
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <h3 class="font-semibold text-gray-800 dark:text-white">
+              {{ guide.description }}
+            </h3>
+            <p class="text-sm text-gray-500 mt-2">{{ guide.filename }}</p>
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-500">No guides uploaded yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VERIFIED AI SUGGESTIONS ================= -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-900">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <h2
+          class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center"
+        >
+          Verified AI Suggestions
+        </h2>
+
+        <div class="space-y-4">
+          {% for v in verified_ai %}
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <p class="font-semibold text-gray-800 dark:text-white">
+              Disease: {{ v.disease }}
+            </p>
+
+            <p class="mt-2 text-sm">
+              Status: {% if v.status == "Correct" %}
+              <span class="text-green-600">Correct</span>
+              {% else %}
+              <span class="text-red-600">Incorrect</span>
+              {% endif %}
+            </p>
+
+            {% if v.correction %}
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              Correction: {{ v.correction }}
+            </p>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-500">No AI verifications yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+          <p class="text-green-100 mb-2">© 2024 KisanSathi – Expert Portal</p>
+          <p class="text-green-200">
+            Supporting Indian Agriculture Through Technology
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+    </script>
+  </body>
+</html>

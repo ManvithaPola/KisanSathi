@@ -1,0 +1,700 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expert Guides - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+                pale: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* ── Dark Mode ── */
+      .dark {
+        background-color: #0b1120;
+        color: #e2e8f0;
+      }
+      .dark .nav-bg {
+        background-color: #0f172a !important;
+        border-bottom-color: #1e293b !important;
+      }
+      .dark .card-bg {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .section-bg {
+        background-color: #0b1120 !important;
+      }
+      .dark .text-muted {
+        color: #94a3b8 !important;
+      }
+      .dark .border-line {
+        border-color: #334155 !important;
+      }
+      .dark .footer-bg {
+        background-color: #060c18 !important;
+      }
+      .dark .select-bg {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+      }
+      .dark .lang-card {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .guide-card {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .icon-ring {
+        background-color: #0f2a10 !important;
+      }
+      .dark .meta-tag {
+        background-color: #052e16 !important;
+        color: #86efac !important;
+        border-color: #14532d !important;
+      }
+      .dark .desc-bg {
+        background-color: #162032 !important;
+      }
+      .dark .empty-bg {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+      }
+      .dark .divider-soft {
+        border-color: #334155 !important;
+      }
+
+      /* ── Toggle switch ── */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 0.3s ease;
+      }
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      }
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* ── Hero ── */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          #1b5e20 0%,
+          #2e7d32 60%,
+          #388e3c 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .dark .hero-section {
+        background: linear-gradient(
+          135deg,
+          #0a1f0b 0%,
+          #0f2a10 60%,
+          #112b12 100%
+        );
+      }
+
+      /* ── Language Card ── */
+      .lang-card {
+        transition: box-shadow 0.25s ease;
+      }
+      .lang-card:hover {
+        box-shadow: 0 12px 32px rgba(46, 125, 50, 0.13);
+      }
+      .dark .lang-card:hover {
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      }
+
+      /* ── Guide Cards ── */
+      .guide-card {
+        transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .guide-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #2e7d32, #4caf50);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+        border-radius: 0 0 16px 16px;
+      }
+      .guide-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 20px 42px rgba(46, 125, 50, 0.14);
+      }
+      .guide-card:hover::after {
+        transform: scaleX(1);
+      }
+      .dark .guide-card:hover {
+        box-shadow: 0 20px 42px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ── Custom select ── */
+      .custom-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 38px;
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease both;
+      }
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+
+      .card-item:nth-child(1) {
+        animation: fadeUp 0.5s 0.05s ease both;
+      }
+      .card-item:nth-child(2) {
+        animation: fadeUp 0.5s 0.12s ease both;
+      }
+      .card-item:nth-child(3) {
+        animation: fadeUp 0.5s 0.19s ease both;
+      }
+      .card-item:nth-child(4) {
+        animation: fadeUp 0.5s 0.26s ease both;
+      }
+      .card-item:nth-child(5) {
+        animation: fadeUp 0.5s 0.33s ease both;
+      }
+      .card-item:nth-child(6) {
+        animation: fadeUp 0.5s 0.4s ease both;
+      }
+      .card-item:nth-child(n + 7) {
+        animation: fadeUp 0.5s 0.47s ease both;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- ════════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'FarmerDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section class="hero-section pt-16">
+      <div class="relative z-10 container mx-auto px-4 py-14 text-center">
+        <!-- Icon panel -->
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 fade-up"
+          style="
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          "
+        >
+          <i class="fas fa-book-open text-2xl text-white"></i>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div
+          class="flex items-center justify-center gap-2 text-green-200 text-xs mb-4 fade-up"
+        >
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span class="text-white font-medium">Expert Guides</span>
+        </div>
+
+        <!-- Title -->
+        <h2
+          class="text-3xl md:text-4xl font-bold text-white mb-3 fade-up delay-1"
+          style="font-family: &quot;Lora&quot;, serif"
+        >
+          Agricultural Expert Guides
+        </h2>
+
+        <!-- Subtitle -->
+        <p
+          class="text-green-100 max-w-xl mx-auto text-sm md:text-base leading-relaxed fade-up delay-2"
+        >
+          Access expert-approved farming resources and best practice manuals —
+          verified by certified agricultural professionals.
+        </p>
+
+        <!-- Trust chips -->
+        <div
+          class="flex flex-wrap items-center justify-center gap-3 mt-6 fade-up delay-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-user-check"></i> Expert Verified
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-language"></i> Multi-Language
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+            style="
+              background: rgba(255, 255, 255, 0.12);
+              color: #d1fae5;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+            "
+          >
+            <i class="fas fa-download"></i> Free Download
+          </span>
+        </div>
+      </div>
+
+      <!-- Wave divider -->
+      <div class="overflow-hidden leading-none" style="height: 50px">
+        <svg
+          viewBox="0 0 1440 50"
+          preserveAspectRatio="none"
+          class="w-full h-full"
+        >
+          <path
+            d="M0,30 C480,60 960,0 1440,30 L1440,50 L0,50 Z"
+            fill="#f9fafb"
+            class="dark:fill-[#0b1120]"
+          />
+        </svg>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         LANGUAGE SELECT SECTION
+    ════════════════════════════════════════════ -->
+    {% comment %} <section class="section-bg py-12 bg-gray-50 dark:bg-[#0b1120]">
+      <div class="container mx-auto px-4">
+        <!-- Language Card -->
+        <div
+          class="lang-card card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] max-w-xl mx-auto p-8 fade-up"
+        >
+          <!-- Card header -->
+          <div class="flex items-center gap-3 mb-6">
+            <div
+              class="w-11 h-11 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0"
+            >
+              <i
+                class="fas fa-language text-primary-dark dark:text-green-400 text-lg"
+              ></i>
+            </div>
+            <div>
+              <h3
+                class="font-bold text-gray-800 dark:text-white text-base"
+                style="font-family: &quot;Lora&quot;, serif"
+              >
+                Select Guide Language
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Choose your preferred language to view matching guides.
+              </p>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <form method="POST" action="{% url 'ViewGuideAction' %}">
+            {% csrf_token %}
+
+            <div class="mb-5">
+              <label
+                for="langSelect"
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+              >
+                <i class="fas fa-globe mr-1 text-primary-light"></i> Language
+              </label>
+              <select
+                id="langSelect"
+                name="t1"
+                class="custom-select select-bg w-full px-4 py-3 rounded-xl border border-gray-200 bg-white dark:bg-[#1e293b] dark:border-[#334155] dark:text-gray-100 text-gray-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value="" disabled selected>
+                  -- Choose a language --
+                </option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="te">Telugu</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
+              style="
+                background: linear-gradient(135deg, #2e7d32, #4caf50);
+                box-shadow: 0 4px 14px rgba(46, 125, 50, 0.3);
+              "
+            >
+              <i class="fas fa-search text-xs"></i>
+              Find Guides
+            </button>
+          </form>
+        </div>
+      </div>
+    </section> {% endcomment %}
+
+    <!-- ════════════════════════════════════════════
+         GUIDES DISPLAY SECTION
+    ════════════════════════════════════════════ -->
+    <section class="section-bg pb-16 bg-gray-50 dark:bg-[#0b1120]">
+      <div class="container mx-auto px-4">
+        {% if guides %}
+
+        <!-- Section label row -->
+        <div class="flex items-center justify-between mb-7 max-w-6xl mx-auto">
+          <div class="flex items-center gap-2">
+            <div class="w-1 h-6 rounded-full bg-primary-light"></div>
+            <h3
+              class="font-semibold text-gray-700 dark:text-gray-200 text-sm uppercase tracking-wider"
+              style="font-family: &quot;Lora&quot;, serif"
+            >
+              Available Guides
+            </h3>
+          </div>
+          <span
+            class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block"
+            ></span>
+            Expert Verified
+          </span>
+        </div>
+
+        <!-- Guides Grid -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7 max-w-6xl mx-auto"
+        >
+          {% for guide in guides %}
+          <div
+            class="guide-card card-item card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] flex flex-col"
+          >
+            <!-- Card Top -->
+            <div class="p-6 pb-4 flex items-start gap-4">
+              <!-- Book icon ring -->
+              <div
+                class="icon-ring w-14 h-14 rounded-2xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0"
+              >
+                <i
+                  class="fas fa-book text-primary-dark dark:text-green-400 text-xl"
+                ></i>
+              </div>
+
+              <!-- Title area -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap mb-1">
+                  <span
+                    class="meta-tag inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-100 dark:border-green-900/40"
+                  >
+                    <i class="fas fa-user-tie text-[9px]"></i> Expert Guide
+                  </span>
+                </div>
+                <h4
+                  class="font-bold text-gray-800 dark:text-white text-sm leading-snug truncate"
+                  style="font-family: &quot;Lora&quot;, serif"
+                >
+                  {{ guide.expert_name }}
+                </h4>
+                <p
+                  class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 flex items-center gap-1"
+                >
+                  <i class="fas fa-file-pdf text-red-400 text-[10px]"></i>
+                  {{ guide.filename }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div
+              class="divider-soft mx-6 border-t border-gray-100 dark:border-[#334155]"
+            ></div>
+
+            <!-- Description -->
+            <div class="px-6 py-4 flex-1">
+              <p
+                class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2"
+              >
+                <i class="fas fa-align-left mr-1 text-primary-light"></i>
+                Description
+              </p>
+              <div
+                class="desc-bg bg-gray-50 dark:bg-[#162032] rounded-xl px-4 py-3"
+              >
+                <p
+                  class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3"
+                >
+                  {{ guide.description }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="px-6 pb-6 pt-2">
+              <a
+                href="Download?rid={{ guide.filename }}"
+                class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 active:scale-95"
+                style="
+                  background: linear-gradient(135deg, #2e7d32, #4caf50);
+                  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.25);
+                "
+              >
+                <i class="fas fa-download text-xs"></i>
+                Download Guide
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Info note -->
+        <p
+          class="text-center text-xs text-gray-400 dark:text-gray-500 mt-10 max-w-lg mx-auto"
+        >
+          <i class="fas fa-info-circle mr-1"></i>
+          All guides are uploaded and verified by certified agricultural experts
+          registered on the KisanSathi platform.
+        </p>
+
+        {% else %}
+
+        <!-- ── Empty State ── -->
+        <div class="max-w-md mx-auto text-center py-16 fade-up">
+          <div
+            class="empty-bg bg-white dark:bg-[#1e293b] border border-gray-100 dark:border-[#334155] rounded-2xl shadow-sm px-10 py-14"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-gray-100 dark:bg-[#162032] flex items-center justify-center mx-auto mb-5"
+            >
+              <i
+                class="fas fa-book-open text-3xl text-gray-300 dark:text-gray-600"
+              ></i>
+            </div>
+            <h4
+              class="text-xl font-bold text-gray-600 dark:text-gray-300 mb-3"
+              style="font-family: &quot;Lora&quot;, serif"
+            >
+              No Guides Available
+            </h4>
+            <p class="text-gray-400 dark:text-gray-500 text-sm leading-relaxed">
+              No guides are available at the moment. Please select a language
+              above and search, or check back later as experts continue to
+              upload new resources.
+            </p>
+            <div
+              class="mt-6 flex items-center justify-center gap-2 text-xs text-primary-dark dark:text-green-400"
+            >
+              <i class="fas fa-seedling"></i>
+              <span>New guides are added regularly by our experts</span>
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+
+          <p class="text-green-300 font-medium text-sm">Government of India</p>
+
+          <div
+            class="mt-4 flex items-center justify-center space-x-4 text-green-200 text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lock"></i> SSL Secured
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-shield-alt"></i> Government Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════
+         SCRIPTS
+    ════════════════════════════════════════════ -->
+    <script>
+      // ── Dark Mode ──
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("theme") || "light";
+      if (saved === "dark") html.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        localStorage.setItem(
+          "theme",
+          html.classList.contains("dark") ? "dark" : "light",
+        );
+      });
+    </script>
+  </body>
+</html>

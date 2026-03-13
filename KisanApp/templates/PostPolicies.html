@@ -1,0 +1,673 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Policies - KisanSathi Government Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              govt: {
+                green: "#1B5E20",
+                navy: "#0f172a",
+                lightgreen: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-50 {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-100 {
+        background-color: #334155 !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .border-gray-300 {
+        border-color: #475569 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #1b5e20;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Hero background */
+      .hero-section {
+        background: linear-gradient(135deg, rgba(27, 94, 32, 0.93), rgba(27, 94, 32, 0.88)),
+          url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=1920&h=600&fit=crop') center/cover;
+      }
+
+      .dark .hero-section {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)),
+          url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=1920&h=600&fit=crop') center/cover;
+      }
+
+      /* Form card styling */
+      .form-card {
+        transition: all 0.3s ease;
+      }
+
+      /* Government button */
+      .govt-button {
+        background-color: #1b5e20;
+        transition: all 0.3s ease;
+      }
+
+      .govt-button:hover {
+        background-color: #145018;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(27, 94, 32, 0.3);
+      }
+
+      /* Input focus styles */
+      .govt-input:focus {
+        outline: none;
+        border-color: #1b5e20;
+        box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+      }
+
+      .dark .govt-input:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+      }
+
+      /* Select dropdown styling */
+      .govt-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231b5e20'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+      }
+
+      /* Alert animations */
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .alert-box {
+        animation: slideInDown 0.6s ease-out;
+      }
+
+      /* Table hover */
+      .policy-table tbody tr {
+        transition: all 0.2s ease;
+      }
+
+      .policy-table tbody tr:hover {
+        background-color: #f9fafb;
+      }
+
+      .dark .policy-table tbody tr:hover {
+        background-color: #334155;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Character counter */
+      .char-counter {
+        font-size: 0.875rem;
+        color: #6b7280;
+        text-align: right;
+      }
+
+      .dark .char-counter {
+        color: #9ca3af;
+      }
+
+      /* Official badge */
+      .official-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Government Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b-2 border-govt-green dark:border-govt-navy">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1 class="text-2xl font-bold text-govt-green dark:text-green-400">
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back to Dashboard Button -->
+            <a
+              href="{% url 'AdminDashboard' %}"
+              class="px-6 py-2 text-govt-green dark:text-green-400 border-2 border-govt-green dark:border-green-400 rounded-full hover:bg-govt-green dark:hover:bg-green-600 hover:text-white transition-all font-semibold flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-700 dark:text-red-400 border-2 border-red-700 dark:border-red-400 rounded-full hover:bg-red-700 dark:hover:bg-red-600 hover:text-white transition-all font-semibold flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 hero-section">
+      <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+          <div class="mb-6">
+            <i class="fas fa-landmark text-6xl drop-shadow-lg"></i>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            Publish Agricultural Policies & Schemes
+          </h2>
+          <p class="text-xl md:text-2xl text-green-50 max-w-4xl mx-auto drop-shadow">
+            Manage and release verified government agricultural schemes and announcements.
+          </p>
+          <div class="mt-6 flex items-center justify-center space-x-2 text-green-100">
+            <i class="fas fa-shield-alt"></i>
+            <span class="text-sm font-medium">Ministry of Agriculture & Farmers Welfare</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Success/Error Alert Section -->
+    {% if data %}
+    <section class="py-8 -mt-16 relative z-10">
+      <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+          {% if 'success' in data|lower or 'published' in data|lower or 'posted' in data|lower %}
+          <div
+            class="alert-box bg-green-50 dark:bg-green-900 border-l-4 border-green-600 text-green-800 dark:text-green-200 p-6 rounded-lg shadow-xl"
+            role="alert"
+          >
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-4xl text-green-600 dark:text-green-400"></i>
+              </div>
+              <div class="ml-4">
+                <p class="font-bold text-lg mb-1">Policy Published Successfully</p>
+                <p class="text-sm">{{ data|safe }}</p>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div
+            class="alert-box bg-red-50 dark:bg-red-900 border-l-4 border-red-600 text-red-800 dark:text-red-200 p-6 rounded-lg shadow-xl"
+            role="alert"
+          >
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-600 dark:text-red-400"></i>
+              </div>
+              <div class="ml-4">
+                <p class="font-bold text-lg mb-1">Publication Error</p>
+                <p class="text-sm">{{ data|safe }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Policy Posting Form Section -->
+    <section class="py-12 {% if not data %}-mt-16 relative z-10{% endif %}">
+      <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+          <!-- Form Card -->
+          <div class="form-card bg-white dark:bg-gray-800 rounded-lg shadow-xl border-t-4 border-govt-green p-8 md:p-10">
+            <div class="mb-8">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-16 h-16 bg-govt-green rounded-lg flex items-center justify-center mr-4 shadow-lg"
+                >
+                  <i class="fas fa-file-alt text-3xl text-white"></i>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-800 dark:text-white">
+                    New Policy Submission
+                  </h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Fill in the details to publish an official policy
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <form
+              method="POST"
+              action="{% url 'PostPoliciesAction' %}"
+              class="space-y-6"
+              id="policyForm"
+            >
+              {% csrf_token %}
+
+              <!-- Policy Name -->
+              <div>
+                <label
+                  for="policyName"
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide"
+                >
+                  <i class="fas fa-heading mr-2 text-govt-green"></i>
+                  Policy Name
+                  <span class="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="policyName"
+                  name="policyName"
+                  required
+                  placeholder="Enter official policy name"
+                  class="govt-input w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all font-medium"
+                />
+              </div>
+
+              <!-- Policy Type -->
+              <div>
+                <label
+                  for="policyType"
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide"
+                >
+                  <i class="fas fa-tag mr-2 text-govt-green"></i>
+                  Policy Type
+                  <span class="text-red-600">*</span>
+                </label>
+                <select
+                  id="policyType"
+                  name="policyType"
+                  required
+                  class="govt-select govt-input w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-all font-medium"
+                >
+                  <option value="" disabled selected>Select policy type</option>
+                  <option value="Scheme">Scheme</option>
+                  <option value="Subsidy">Subsidy</option>
+                  <option value="News">News</option>
+                  <option value="Announcement">Announcement</option>
+                  <option value="Alert">Alert</option>
+                </select>
+              </div>
+
+              <!-- Policy Description -->
+              <div>
+                <label
+                  for="policyDescription"
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide"
+                >
+                  <i class="fas fa-align-left mr-2 text-govt-green"></i>
+                  Policy Description
+                  <span class="text-red-600">*</span>
+                </label>
+                <textarea
+                  id="policyDescription"
+                  name="policyDescription"
+                  rows="6"
+                  required
+                  placeholder="Enter detailed policy description, eligibility criteria, and implementation guidelines..."
+                  maxlength="2000"
+                  class="govt-input w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all resize-none"
+                ></textarea>
+                <div class="char-counter mt-1">
+                  <span id="charCount">0</span> / 2000 characters
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-4">
+                <button
+                  type="submit"
+                  class="govt-button w-full py-4 text-white font-bold rounded-md shadow-lg flex items-center justify-center space-x-3 text-lg uppercase tracking-wide"
+                >
+                  <i class="fas fa-paper-plane"></i>
+                  <span>Publish Policy</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Official Notice Panel -->
+    <section class="py-8">
+      <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+          <div
+            class="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-600 rounded-md p-6 shadow-md"
+          >
+            <div class="flex items-start">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-yellow-500 dark:bg-yellow-600 rounded-full flex items-center justify-center mr-4"
+              >
+                <i class="fas fa-exclamation-triangle text-xl text-white"></i>
+              </div>
+              <div>
+                <h4 class="text-lg font-bold text-gray-800 dark:text-white mb-2">
+                  Official Guidelines
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                  ⚠ Ensure policies are verified and approved before publishing. All announcements must comply with 
+                  <strong>Ministry of Agriculture & Farmers Welfare</strong> regulations. Unauthorized or unverified 
+                  policies will be subject to immediate removal and administrative action.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Published Policies Section -->
+    <section class="py-12 pb-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+            <div class="flex items-center mb-6">
+              <i class="fas fa-history text-3xl text-govt-green mr-4"></i>
+              <h3 class="text-2xl font-bold text-gray-800 dark:text-white">
+                Recently Published Policies
+              </h3>
+            </div>
+
+            {% if policies %}
+            <div class="overflow-x-auto">
+              <table class="policy-table w-full">
+                <thead>
+                  <tr class="bg-gray-100 dark:bg-gray-700 border-b-2 border-govt-green">
+                    <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                      Policy Name
+                    </th>
+                    <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                      Type
+                    </th>
+                    <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                      Published Date
+                    </th>
+                    <th class="px-6 py-4 text-center text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  {% for policy in policies %}
+                  <tr>
+                    <td class="px-6 py-4">
+                      <div class="flex items-center">
+                        <i class="fas fa-file-alt text-govt-green mr-3"></i>
+                        <span class="text-gray-800 dark:text-gray-200 font-medium">
+                          {{ policy.name }}
+                        </span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-semibold">
+                        {{ policy.type }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                      <i class="fas fa-calendar-alt mr-2"></i>
+                      {{ policy.date }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                      <span class="inline-block px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-semibold">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        Active
+                      </span>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+              <i class="fas fa-inbox text-6xl text-gray-400 dark:text-gray-600 mb-4"></i>
+              <p class="text-xl font-semibold text-gray-600 dark:text-gray-400">
+                No policies published yet.
+              </p>
+              <p class="text-gray-500 dark:text-gray-500 mt-2">
+                Published policies will appear here for review.
+              </p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Government Footer -->
+    <footer class="bg-govt-green dark:bg-govt-navy text-white py-12 border-t-4 border-yellow-600">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+          <p class="text-green-300 font-medium text-sm">
+            Secured Administrative Access
+          </p>
+          <div class="mt-4 flex items-center justify-center space-x-2 text-green-200 text-sm">
+            <i class="fas fa-lock"></i>
+            <span>SSL Secured</span>
+            <span class="mx-2">•</span>
+            <i class="fas fa-shield-alt"></i>
+            <span>Government Verified</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+
+      // Character counter for description
+      const descriptionTextarea = document.getElementById("policyDescription");
+      const charCount = document.getElementById("charCount");
+
+      descriptionTextarea.addEventListener("input", () => {
+        const length = descriptionTextarea.value.length;
+        charCount.textContent = length;
+        
+        if (length > 1800) {
+          charCount.classList.add("text-red-600");
+        } else {
+          charCount.classList.remove("text-red-600");
+        }
+      });
+
+      // Auto-hide alert after 6 seconds
+      const alertBox = document.querySelector(".alert-box");
+      if (alertBox) {
+        setTimeout(() => {
+          alertBox.style.transition = "opacity 0.5s ease";
+          alertBox.style.opacity = "0";
+          setTimeout(() => {
+            alertBox.remove();
+          }, 500);
+        }, 6000);
+      }
+
+      // Form validation
+      const form = document.getElementById("policyForm");
+      
+      form.addEventListener("submit", (e) => {
+        const policyName = document.getElementById("policyName").value.trim();
+        const policyType = document.getElementById("policyType").value;
+        const policyDescription = document.getElementById("policyDescription").value.trim();
+
+        if (!policyName || !policyType || !policyDescription) {
+          e.preventDefault();
+          alert("Please fill in all required fields.");
+          return false;
+        }
+
+        if (policyDescription.length < 50) {
+          e.preventDefault();
+          alert("Policy description must be at least 50 characters long.");
+          return false;
+        }
+      });
+    </script>
+  </body>
+</html>

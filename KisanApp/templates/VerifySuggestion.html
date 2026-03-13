@@ -1,0 +1,552 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify AI Suggestions - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .bg-gray-50 {
+        background-color: #1e293b !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .text-gray-500 {
+        color: #64748b !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .border-gray-300 {
+        border-color: #334155 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Form input styling */
+      .form-input {
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #2e7d32;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+      }
+
+      .dark .form-input {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+      }
+
+      .dark .form-input:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+      }
+
+      /* Alert styles */
+      .alert-success {
+        background-color: #d1f2eb;
+        border-left: 4px solid #2e7d32;
+        color: #1b4332;
+      }
+
+      .dark .alert-success {
+        background-color: #1e3a2e;
+        color: #a7f3d0;
+      }
+
+      /* Radio button styling */
+      input[type="radio"] {
+        accent-color: #2e7d32;
+      }
+
+      /* Image preview styling */
+      .ai-result-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+    <script>
+      function validate(formObj) {
+        if (formObj.t1.value.length == 0) {
+          alert("Please upload test image");
+          formObj.t1.focus();
+          return false;
+        }
+        return true;
+      }
+
+      function toggleBox(show) {
+        document.getElementById("correctionBox").style.display = show
+          ? "block"
+          : "none";
+      }
+    </script>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'ExpertDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="pt-32 pb-12 bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-900 dark:to-gray-800"
+    >
+      <div class="container mx-auto px-4 max-w-4xl text-center">
+        <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          AI Suggestion Verification
+        </h2>
+        <p class="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+          Verify AI disease detection and fertilizer recommendation.
+        </p>
+      </div>
+    </section>
+
+    <!-- Success Message -->
+    {% if success %}
+    <section class="py-6">
+      <div class="container mx-auto px-4 max-w-4xl">
+        <div class="alert-success rounded-lg p-4 shadow-md flex items-center">
+          <i class="fas fa-check-circle text-2xl mr-3"></i>
+          <span class="font-medium">{{ success }}</span>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Upload Section -->
+    <section class="py-8">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+          <h3
+            class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
+          >
+            <i
+              class="fas fa-upload text-primary-dark dark:text-primary-light mr-3"
+            ></i>
+            Upload Plant Image
+          </h3>
+
+          <form
+            name="f1"
+            method="post"
+            action="{% url 'VerifySuggestionAction' %}"
+            enctype="multipart/form-data"
+            onsubmit="return validate(this);"
+          >
+            {% csrf_token %}
+
+            <!-- Upload File -->
+            <div class="mb-6">
+              <label
+                for="t1"
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Select Plant/Leaf Image
+                <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="file"
+                  id="t1"
+                  name="t1"
+                  accept="image/*"
+                  class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-light file:text-white hover:file:bg-primary-dark file:cursor-pointer"
+                />
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Upload a clear image of the plant or leaf for AI analysis
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+              <button
+                type="submit"
+                class="px-10 py-3 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full font-semibold hover:bg-primary dark:hover:bg-green-600 transition-all shadow-md hover:shadow-lg flex items-center space-x-2"
+              >
+                <i class="fas fa-brain"></i>
+                <span>Analyze with AI</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Result Section -->
+    {% if img %}
+    <section class="py-8">
+      <div class="container mx-auto px-4 max-w-5xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+          <h3
+            class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
+          >
+            <i
+              class="fas fa-microscope text-primary-dark dark:text-primary-light mr-3"
+            ></i>
+            AI Analysis Results
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Uploaded Image -->
+            <div>
+              <h4
+                class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3"
+              >
+                Uploaded Image
+              </h4>
+              <img
+                src="data:image/png;base64,{{ img }}"
+                alt="Uploaded Plant"
+                class="ai-result-image w-full"
+              />
+            </div>
+
+            <!-- AI Predictions -->
+            <div>
+              <h4
+                class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4"
+              >
+                AI Predictions
+              </h4>
+
+              <!-- Disease Detection -->
+              <div
+                class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-4 mb-4"
+              >
+                <div class="flex items-center mb-2">
+                  <i class="fas fa-virus text-blue-600 dark:text-blue-400 mr-2"></i>
+                  <span
+                    class="font-semibold text-gray-700 dark:text-gray-300"
+                    >Disease Detected:</span
+                  >
+                </div>
+                <p
+                  class="text-xl font-bold text-blue-800 dark:text-blue-300 ml-6"
+                >
+                  {{ disease }}
+                </p>
+              </div>
+
+              <!-- Fertilizer Recommendation -->
+              <div
+                class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg p-4"
+              >
+                <div class="flex items-center mb-2">
+                  <i
+                    class="fas fa-seedling text-green-600 dark:text-green-400 mr-2"
+                  ></i>
+                  <span
+                    class="font-semibold text-gray-700 dark:text-gray-300"
+                    >Fertilizer Recommendation:</span
+                  >
+                </div>
+                <p
+                  class="text-base text-gray-700 dark:text-gray-300 ml-6 leading-relaxed"
+                >
+                  {{ fertilizer_details }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expert Verification Section -->
+    {% if not verified %}
+    <section class="py-8 pb-20">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+          <h3
+            class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
+          >
+            <i
+              class="fas fa-user-check text-primary-dark dark:text-primary-light mr-3"
+            ></i>
+            Expert Verification
+          </h3>
+
+          <form method="post" action="{% url 'SaveVerification' %}">
+            {% csrf_token %}
+
+            <input type="hidden" name="disease" value="{{ disease }}" />
+
+            <!-- Verification Question -->
+            <div class="mb-6">
+              <p
+                class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4"
+              >
+                Is the AI suggestion correct?
+              </p>
+
+              <!-- Radio Options -->
+              <div class="space-y-3">
+                <label
+                  class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-all"
+                >
+                  <input
+                    type="radio"
+                    name="status"
+                    value="Correct"
+                    onclick="toggleBox(false)"
+                    required
+                    class="w-5 h-5"
+                  />
+                  <span
+                    class="ml-3 text-gray-700 dark:text-gray-300 font-medium"
+                  >
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    AI Suggestion is Correct
+                  </span>
+                </label>
+
+                <label
+                  class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-all"
+                >
+                  <input
+                    type="radio"
+                    name="status"
+                    value="Incorrect"
+                    onclick="toggleBox(true)"
+                    class="w-5 h-5"
+                  />
+                  <span
+                    class="ml-3 text-gray-700 dark:text-gray-300 font-medium"
+                  >
+                    <i class="fas fa-times-circle text-red-600 mr-2"></i>
+                    AI Suggestion is Incorrect
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Correction Box (Hidden by default) -->
+            <div id="correctionBox" style="display: none" class="mb-6">
+              <label
+                for="correction"
+                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Provide Correct Information
+              </label>
+              <textarea
+                id="correction"
+                name="correction"
+                rows="5"
+                class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none"
+                placeholder="Enter the correct disease name or fertilizer recommendation..."
+              ></textarea>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Provide accurate information to improve AI model training
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+              <button
+                type="submit"
+                class="px-10 py-3 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full font-semibold hover:bg-primary dark:hover:bg-green-600 transition-all shadow-md hover:shadow-lg flex items-center space-x-2"
+              >
+                <i class="fas fa-check-double"></i>
+                <span>Submit Verification</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+          <p class="text-green-100 mb-2">© 2026 KisanSathi – Expert Portal</p>
+          <p class="text-green-200">
+            Supporting Indian Agriculture Through Technology
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+    </script>
+  </body>
+</html>

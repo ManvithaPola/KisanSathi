@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KisanSathi - AI Assisted Farmer Support System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+              },
+              secondary: {
+                dark: "#558B2F",
+                DEFAULT: "#7CB342",
+                light: "#AED581",
+              },
+              accent: {
+                yellow: "#FBC02D",
+                orange: "#F57C00",
+              },
+            },
+            fontFamily: {
+              sans: ["Poppins", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Dark mode styles */
+      .dark {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .dark .bg-white {
+        background-color: #1e293b !important;
+      }
+
+      .dark .text-gray-800 {
+        color: #e2e8f0 !important;
+      }
+
+      .dark .text-gray-700 {
+        color: #cbd5e1 !important;
+      }
+
+      .dark .text-gray-600 {
+        color: #94a3b8 !important;
+      }
+
+      .dark .border-gray-200 {
+        border-color: #334155 !important;
+      }
+
+      .dark .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.5),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Navbar styles */
+      .navbar-scrolled {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .navbar-scrolled {
+        background-color: rgba(30, 41, 59, 0.9);
+      }
+
+      /* Hover underline animation */
+      .nav-link {
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #2e7d32;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      /* Button animations */
+      .btn-primary {
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
+      }
+
+      /* Card hover effects */
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .dark .card-hover:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Fade in animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Counter animation */
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .counter {
+        animation: countUp 0.6s ease;
+      }
+
+      /* Step connector line */
+      .step-line {
+        position: relative;
+      }
+
+      .step-line::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, #2e7d32, transparent);
+      }
+
+      @media (max-width: 768px) {
+        .step-line::after {
+          display: none;
+        }
+      }
+
+      /* Mobile menu */
+      .mobile-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .mobile-menu.active {
+        max-height: 500px;
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .dark .toggle-switch {
+        background-color: #2e7d32;
+      }
+
+      .dark .toggle-switch::after {
+        transform: translateX(24px);
+      }
+
+      /* Section spacing */
+      .section {
+        padding: 80px 0;
+      }
+
+      @media (max-width: 768px) {
+        .section {
+          padding: 50px 0;
+        }
+      }
+
+      /* Prevent text selection on toggle */
+      .toggle-switch {
+        user-select: none;
+      }
+
+      /* Logo styling */
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Ensure proper spacing between sections */
+      .section + .section {
+        margin-top: 0;
+      }
+
+      /* CTA section background */
+      .cta-section {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+      }
+
+      .dark .cta-section {
+        background: linear-gradient(135deg, #1b5e20 0%, #0f172a 100%);
+      }
+
+      /* Footer dark mode */
+      .footer-dark {
+        background-color: #1b5e20;
+      }
+
+      .dark .footer-dark {
+        background-color: #0a1628;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md transition-all duration-300"
+    >
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              href="index.html"
+              src="/static/images/logo.png"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Desktop Menu -->
+          <ul class="hidden md:flex items-center space-x-8">
+            <li>
+              <a
+                href="index.html"
+                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="Aboutus.html"
+                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="Contactus.html"
+                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                href="help.html"
+                class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium"
+                >Help</a
+              >
+            </li>
+          </ul>
+
+          <!-- Right side buttons -->
+          <div class="hidden md:flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+            <a
+              href="login.html"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="px-6 py-2 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full hover:bg-primary hover:shadow-lg transition-all font-medium"
+              >Register</a
+            >
+          </div>
+
+          <!-- Mobile menu button -->
+          <button
+            id="mobileMenuBtn"
+            class="md:hidden text-gray-700 dark:text-gray-300"
+          >
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden mt-4">
+          <ul class="flex flex-col space-y-3 pb-4">
+            <li>
+              <a
+                href="index.html"
+                class="block text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium py-2"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="Aboutus.html"
+                class="block text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium py-2"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="Contactus.html"
+                class="block text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium py-2"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                href="help.html"
+                class="block text-gray-700 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-light font-medium py-2"
+                >Help</a
+              >
+            </li>
+            <li class="flex items-center justify-between py-2">
+              <span class="text-gray-700 dark:text-gray-300 font-medium"
+                >Dark Mode</span
+              >
+              <div class="toggle-switch" id="themeToggleMobile"></div>
+            </li>
+            <li>
+              <a
+                href="login.html"
+                class="block text-center px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium"
+                >Login</a
+              >
+            </li>
+            <li>
+              <a
+                href="register.html"
+                class="block text-center px-6 py-2 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full hover:bg-primary hover:shadow-lg transition-all font-medium"
+                >Register</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      id="home"
+      class="section pt-32 pb-20 bg-gradient-to-br from-green-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800"
+    >
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <!-- Left Content -->
+          <div class="flex-1 fade-in">
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
+            >
+              Empowering Farmers with
+              <span class="text-primary-dark dark:text-primary-light">AI</span>
+              & Verified
+              <span class="text-accent-yellow">Government Support</span>
+            </h1>
+            <p
+              class="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
+            >
+              KisanSathi bridges the gap between farmers, agricultural experts,
+              and government authorities. Get accurate crop prices, AI-powered
+              recommendations, and direct expert guidance—all without middlemen
+              exploitation.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#register"
+                class="btn-primary px-8 py-4 bg-primary-dark dark:bg-primary-light text-white dark:text-gray-900 rounded-full font-semibold text-center hover:bg-primary transition-all"
+              >
+                Get Started <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+              <a
+                href="#features"
+                class="px-8 py-4 border-2 border-primary-dark dark:border-primary-light text-primary-dark dark:text-primary-light rounded-full font-semibold text-center hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all"
+              >
+                Explore Features
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Illustration -->
+          <div class="flex-1 grid grid-cols-2 gap-4 fade-in">
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg text-center card-hover"
+            >
+              <i
+                class="fas fa-brain text-4xl text-primary-dark dark:text-primary-light mb-3"
+              ></i>
+              <h3 class="font-semibold text-gray-800 dark:text-white">
+                AI Analysis
+              </h3>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg text-center card-hover"
+            >
+              <i
+                class="fas fa-user-tie text-4xl text-secondary-dark dark:text-secondary-light mb-3"
+              ></i>
+              <h3 class="font-semibold text-gray-800 dark:text-white">
+                Expert Support
+              </h3>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg text-center card-hover"
+            >
+              <i class="fas fa-landmark text-4xl text-accent-yellow mb-3"></i>
+              <h3 class="font-semibold text-gray-800 dark:text-white">
+                Government
+              </h3>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg text-center card-hover"
+            >
+              <i class="fas fa-users text-4xl text-accent-orange mb-3"></i>
+              <h3 class="font-semibold text-gray-800 dark:text-white">
+                Community
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section py-16 bg-white dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="text-center fade-in">
+            <div
+              class="counter text-4xl md:text-5xl font-bold text-primary-dark dark:text-primary-light mb-2"
+              data-target="50000"
+            >
+              0
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">
+              Farmers Supported
+            </p>
+          </div>
+          <div class="text-center fade-in">
+            <div
+              class="counter text-4xl md:text-5xl font-bold text-secondary-dark dark:text-secondary-light mb-2"
+              data-target="1200"
+            >
+              0
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">
+              Experts Connected
+            </p>
+          </div>
+          <div class="text-center fade-in">
+            <div
+              class="counter text-4xl md:text-5xl font-bold text-accent-yellow mb-2"
+              data-target="5000"
+            >
+              0
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">
+              Government Updates
+            </p>
+          </div>
+          <div class="text-center fade-in">
+            <div
+              class="counter text-4xl md:text-5xl font-bold text-accent-orange mb-2"
+              data-target="100000"
+            >
+              0
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">
+              AI Recommendations
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section
+      class="section bg-gradient-to-br from-green-50 to-yellow-50 dark:from-gray-800 dark:to-gray-900"
+    >
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16 fade-in">
+          <h2
+            class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            How It Works
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Simple steps to connect with agricultural experts and get AI-powered
+            recommendations
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Step 1 -->
+          <div class="fade-in text-center">
+            <div class="relative inline-block mb-6">
+              <div
+                class="w-20 h-20 bg-primary-dark dark:bg-primary-light rounded-full flex items-center justify-center text-white dark:text-gray-900 text-2xl font-bold shadow-lg"
+              >
+                1
+              </div>
+              <div class="step-line hidden md:block"></div>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover"
+            >
+              <i
+                class="fas fa-user-plus text-4xl text-primary-dark dark:text-primary-light mb-4"
+              ></i>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                Farmer Registration
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Create your free account and join our farming community
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="fade-in text-center">
+            <div class="relative inline-block mb-6">
+              <div
+                class="w-20 h-20 bg-secondary-dark dark:bg-secondary-light rounded-full flex items-center justify-center text-white dark:text-gray-900 text-2xl font-bold shadow-lg"
+              >
+                2
+              </div>
+              <div class="step-line hidden md:block"></div>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover"
+            >
+              <i
+                class="fas fa-upload text-4xl text-secondary-dark dark:text-secondary-light mb-4"
+              ></i>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                Upload Crop Details
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Share your crop information and farm details with us
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="fade-in text-center">
+            <div class="relative inline-block mb-6">
+              <div
+                class="w-20 h-20 bg-accent-yellow rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+              >
+                3
+              </div>
+              <div class="step-line hidden md:block"></div>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover"
+            >
+              <i class="fas fa-brain text-4xl text-accent-yellow mb-4"></i>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                AI Analysis
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Our AI analyzes your data and provides recommendations
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="fade-in text-center">
+            <div class="relative inline-block mb-6">
+              <div
+                class="w-20 h-20 bg-accent-orange rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+              >
+                4
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover"
+            >
+              <i
+                class="fas fa-hands-helping text-4xl text-accent-orange mb-4"
+              ></i>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                Expert Support
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Connect with verified experts and government resources
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section bg-white dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16 fade-in">
+          <h2
+            class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            Our Features
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Comprehensive tools and resources to support your farming journey
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-primary-dark dark:bg-primary-light rounded-full flex items-center justify-center mb-4"
+            >
+              <i
+                class="fas fa-shield-alt text-2xl text-white dark:text-gray-900"
+              ></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Role-Based Access
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Secure platform with different access levels for farmers, experts,
+              and administrators
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div
+            class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-accent-yellow rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-rupee-sign text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Verified Crop Prices
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Access real-time, government-verified crop prices without
+              middlemen manipulation
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div
+            class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-microscope text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Disease Detection
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              AI-powered crop disease detection through image analysis for early
+              intervention
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div
+            class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-purple-600 dark:bg-purple-500 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-seedling text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Fertilizer Recommendations
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Get personalized fertilizer suggestions based on soil type and
+              crop requirements
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div
+            class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-accent-orange rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-users text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              Farmer Groups
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Join crop-specific farmer communities for knowledge sharing and
+              collaboration
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div
+            class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-gray-800 dark:to-gray-700 p-8 rounded-2xl shadow-lg card-hover fade-in"
+          >
+            <div
+              class="w-16 h-16 bg-teal-600 dark:bg-teal-500 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-robot text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">
+              AI Chatbot Support
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              24/7 AI assistant to answer farming queries and provide instant
+              guidance
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Farmer Collaboration Section -->
+    <section
+      class="section bg-gradient-to-br from-green-50 to-yellow-50 dark:from-gray-800 dark:to-gray-900"
+    >
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <!-- Left Image -->
+          <div class="flex-1 fade-in">
+            <img
+              src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&h=400&fit=crop"
+              alt="Farmers collaborating"
+              class="rounded-2xl shadow-2xl w-full object-cover"
+              style="height: 400px"
+            />
+          </div>
+
+          <!-- Right Content -->
+          <div class="flex-1 fade-in">
+            <h2
+              class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6"
+            >
+              Farmer Collaboration Groups
+            </h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+              Connect with fellow farmers growing the same crops. Share
+              experiences, learn best practices, and grow together as a
+              community.
+            </p>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-primary-dark dark:text-primary-light text-2xl mr-4 mt-1"
+                ></i>
+                <div>
+                  <h4 class="font-semibold text-gray-800 dark:text-white mb-1">
+                    Crop-Specific Groups
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Join groups dedicated to your specific crops for targeted
+                    advice
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-primary-dark dark:text-primary-light text-2xl mr-4 mt-1"
+                ></i>
+                <div>
+                  <h4 class="font-semibold text-gray-800 dark:text-white mb-1">
+                    Expert Moderation
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    All groups are monitored by verified agricultural experts
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-primary-dark dark:text-primary-light text-2xl mr-4 mt-1"
+                ></i>
+                <div>
+                  <h4 class="font-semibold text-gray-800 dark:text-white mb-1">
+                    Knowledge Sharing
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Learn from the collective wisdom of experienced farmers
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Support Section -->
+    <section class="section bg-white dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16 fade-in">
+          <h2
+            class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            AI-Powered Intelligence
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Advanced artificial intelligence working round the clock to support
+            your farming decisions
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            class="bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl shadow-lg text-center card-hover fade-in"
+          >
+            <i
+              class="fas fa-leaf text-5xl text-primary-dark dark:text-primary-light mb-4"
+            ></i>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+              Disease Detection
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Upload crop images for instant disease identification and
+              treatment recommendations
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl shadow-lg text-center card-hover fade-in"
+          >
+            <i
+              class="fas fa-chart-line text-5xl text-blue-600 dark:text-blue-400 mb-4"
+            ></i>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+              Yield Prediction
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              AI-based crop yield forecasting to help plan harvest and sales
+              strategies
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl shadow-lg text-center card-hover fade-in"
+          >
+            <i
+              class="fas fa-vial text-5xl text-purple-600 dark:text-purple-400 mb-4"
+            ></i>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+              Fertilizer Guidance
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Smart recommendations for optimal fertilizer use based on soil
+              analysis
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl shadow-lg text-center card-hover fade-in"
+          >
+            <i class="fas fa-comments text-5xl text-accent-orange mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
+              24/7 AI Chatbot
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              Get instant answers to farming questions anytime, anywhere
+            </p>
+          </div>
+        </div>
+
+        <!-- AI Image with Farmers -->
+        <div class="mt-16 fade-in">
+          <img
+            src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1200&h=400&fit=crop"
+            alt="Farmers using technology"
+            class="rounded-2xl shadow-2xl w-full object-cover"
+            style="height: 400px"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Government Integration Section -->
+    <section class="section bg-primary-dark dark:bg-gray-950 text-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16 fade-in">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            Government Integration
+          </h2>
+          <p class="text-lg text-green-100 max-w-2xl mx-auto">
+            Direct access to official government resources and verified
+            information
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            class="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20 card-hover fade-in"
+          >
+            <i class="fas fa-certificate text-5xl text-accent-yellow mb-4"></i>
+            <h3 class="text-2xl font-bold mb-3">Verified Crop Prices</h3>
+            <p class="text-green-100">
+              Access real-time, government-authenticated crop prices directly
+              from official sources to ensure fair trading
+            </p>
+          </div>
+
+          <div
+            class="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20 card-hover fade-in"
+          >
+            <i class="fas fa-gift text-5xl text-accent-yellow mb-4"></i>
+            <h3 class="text-2xl font-bold mb-3">Government Schemes</h3>
+            <p class="text-green-100">
+              Stay informed about agricultural subsidies, loans, and welfare
+              schemes available for farmers
+            </p>
+          </div>
+
+          <div
+            class="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20 card-hover fade-in"
+          >
+            <i class="fas fa-bullhorn text-5xl text-accent-yellow mb-4"></i>
+            <h3 class="text-2xl font-bold mb-3">Official Updates</h3>
+            <p class="text-green-100">
+              Receive timely advisories on weather, pest control, and best
+              farming practices from government authorities
+            </p>
+          </div>
+        </div>
+
+        <!-- Farmer with Government Official Image -->
+        <div class="mt-16 fade-in flex justify-center">
+          <img
+            src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&h=500&fit=crop"
+            alt="Farmer with agricultural expert"
+            class="rounded-2xl shadow-2xl max-w-3xl w-full object-cover"
+            style="height: 400px"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="register" class="section cta-section text-white">
+      <div class="container mx-auto px-4 text-center">
+        <div class="max-w-3xl mx-auto fade-in">
+          <h2 class="text-3xl md:text-5xl font-bold mb-6">
+            Ready to Transform Your Farming Journey?
+          </h2>
+          <p class="text-xl mb-8 text-green-100">
+            Join thousands of farmers who are already benefiting from AI-powered
+            insights, expert guidance, and direct government support. No more
+            middlemen, no more exploitation—just pure agricultural empowerment.
+          </p>
+          <a
+            href="#signup"
+            class="inline-block btn-primary px-12 py-5 bg-white text-primary-dark rounded-full font-bold text-lg hover:bg-accent-yellow hover:text-white transition-all shadow-xl"
+          >
+            Register Now – It's Free <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+          <p class="mt-6 text-green-100">
+            No credit card required • Free forever • Join 50,000+ farmers
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer-dark text-white py-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <!-- Brand -->
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <img
+                src="/static/images/logo.png"
+                alt="KisanSathi Logo"
+                class="logo-img w-12 h-12 object-contain"
+              />
+              <h3 class="text-2xl font-bold">KisanSathi</h3>
+            </div>
+            <p class="text-green-100">
+              Empowering farmers with AI and verified government support for a
+              prosperous agricultural future.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#home"
+                  class="text-green-100 hover:text-white transition"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#features"
+                  class="text-green-100 hover:text-white transition"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  class="text-green-100 hover:text-white transition"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#register"
+                  class="text-green-100 hover:text-white transition"
+                  >Register</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div id="help">
+            <h4 class="text-lg font-semibold mb-4">Support</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >FAQs</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Terms of Service</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-green-100 hover:text-white transition"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <i class="fas fa-envelope mr-3 text-accent-yellow"></i>
+                <span class="text-green-100">support@kisansathi.gov.in</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone mr-3 text-accent-yellow"></i>
+                <span class="text-green-100">1800-XXX-XXXX (Toll Free)</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-map-marker-alt mr-3 text-accent-yellow"></i>
+                <span class="text-green-100">New Delhi, India</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div
+          class="border-t border-green-800 dark:border-gray-700 pt-8 text-center"
+        >
+          <p class="text-green-100">
+            &copy; 2024 KisanSathi - AI Assisted Farmer Support System. All
+            rights reserved. | Developed for Agricultural Empowerment
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Dark mode toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const themeToggleMobile = document.getElementById("themeToggleMobile");
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to light mode
+      const currentTheme = localStorage.getItem("theme") || "light";
+      if (currentTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      function toggleTheme() {
+        html.classList.toggle("dark");
+        const isDark = html.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      }
+
+      themeToggle.addEventListener("click", toggleTheme);
+      themeToggleMobile.addEventListener("click", toggleTheme);
+
+      // Mobile menu toggle
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("active");
+      });
+
+      // Navbar scroll effect
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("navbar-scrolled");
+        } else {
+          navbar.classList.remove("navbar-scrolled");
+        }
+      });
+
+      // Intersection Observer for fade-in animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".fade-in").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Counter animation
+      function animateCounter(element) {
+        const target = parseInt(element.getAttribute("data-target"));
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+
+        const updateCounter = () => {
+          current += increment;
+          if (current < target) {
+            element.textContent = Math.floor(current).toLocaleString();
+            requestAnimationFrame(updateCounter);
+          } else {
+            element.textContent = target.toLocaleString();
+          }
+        };
+
+        updateCounter();
+      }
+
+      // Animate counters when visible
+      const counterObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateCounter(entry.target);
+              counterObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+
+      document.querySelectorAll(".counter").forEach((counter) => {
+        counterObserver.observe(counter);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            const offsetTop = target.offsetTop - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth",
+            });
+            // Close mobile menu if open
+            mobileMenu.classList.remove("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

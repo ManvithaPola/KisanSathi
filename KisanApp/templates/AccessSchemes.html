@@ -1,0 +1,488 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Government Schemes - KisanSathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                dark: "#1B5E20",
+                DEFAULT: "#2E7D32",
+                light: "#4CAF50",
+                pale: "#E8F5E9",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* ── Dark Mode ── */
+      .dark { background-color: #0b1120; color: #e2e8f0; }
+      .dark .nav-bg       { background-color: #0f172a !important; border-bottom-color: #1e293b !important; }
+      .dark .card-bg      { background-color: #1e293b !important; border-color: #334155 !important; }
+      .dark .section-bg   { background-color: #0b1120 !important; }
+      .dark .text-muted   { color: #94a3b8 !important; }
+      .dark .border-line  { border-color: #334155 !important; }
+      .dark .footer-bg    { background-color: #060c18 !important; }
+      .dark .search-bg    { background-color: #1e293b !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+      .dark .search-bg::placeholder { color: #64748b !important; }
+      .dark .tag-bg       { background-color: #052e16 !important; color: #86efac !important; }
+      .dark .date-badge   { background-color: #1a2236 !important; color: #94a3b8 !important; border-color: #334155 !important; }
+      .dark .divider-line { border-color: #1e293b !important; }
+      .dark .empty-icon-bg { background-color: #1e293b !important; }
+
+      /* ── Toggle switch ── */
+      .toggle-switch {
+        width: 50px; height: 26px;
+        background-color: #cbd5e1;
+        border-radius: 13px; position: relative;
+        cursor: pointer; flex-shrink: 0;
+        transition: background-color 0.3s ease;
+      }
+      .toggle-switch::after {
+        content: ""; position: absolute;
+        top: 3px; left: 3px;
+        width: 20px; height: 20px;
+        background-color: white; border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      }
+      .dark .toggle-switch { background-color: #2e7d32; }
+      .dark .toggle-switch::after { transform: translateX(24px); }
+
+      /* ── Hero ── */
+      .hero-section {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+        position: relative; overflow: hidden;
+      }
+      .hero-section::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .dark .hero-section {
+        background: linear-gradient(135deg, #0a1f0b 0%, #0f2a10 60%, #112b12 100%);
+      }
+
+      /* ── Scheme Cards ── */
+      .scheme-card {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative; overflow: hidden;
+      }
+      .scheme-card::after {
+        content: "";
+        position: absolute; bottom: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #2e7d32, #4caf50);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.3s ease;
+        border-radius: 0 0 16px 16px;
+      }
+      .scheme-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.14);
+      }
+      .scheme-card:hover::after { transform: scaleX(1); }
+      .dark .scheme-card:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ── Search ── */
+      .search-wrapper { position: relative; }
+      .search-wrapper .search-icon {
+        position: absolute; left: 14px; top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8; font-size: 0.9rem;
+        pointer-events: none;
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .fade-up  { animation: fadeUp 0.6s ease both; }
+      .delay-1  { animation-delay: 0.1s; }
+      .delay-2  { animation-delay: 0.2s; }
+      .delay-3  { animation-delay: 0.3s; }
+
+      /* ── Card stagger ── */
+      .card-item:nth-child(1) { animation: fadeUp 0.5s 0.05s ease both; }
+      .card-item:nth-child(2) { animation: fadeUp 0.5s 0.12s ease both; }
+      .card-item:nth-child(3) { animation: fadeUp 0.5s 0.19s ease both; }
+      .card-item:nth-child(4) { animation: fadeUp 0.5s 0.26s ease both; }
+      .card-item:nth-child(5) { animation: fadeUp 0.5s 0.33s ease both; }
+      .card-item:nth-child(6) { animation: fadeUp 0.5s 0.40s ease both; }
+      .card-item:nth-child(n+7) { animation: fadeUp 0.5s 0.47s ease both; }
+
+      /* ── Desc clamp ── */
+      .desc-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .desc-text.expanded { -webkit-line-clamp: unset; }
+
+      html { scroll-behavior: smooth; }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+
+    <!-- ════════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <!-- Logo and Brand -->
+          <div class="flex items-center space-x-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="logo-img w-12 h-12 object-contain"
+            />
+            <div>
+              <h1
+                class="text-2xl font-bold text-primary-dark dark:text-primary-light"
+              >
+                KisanSathi
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                AI-Assisted Farmer Support
+              </p>
+            </div>
+          </div>
+
+          <!-- Right side buttons -->
+          <div class="flex items-center space-x-4">
+            <!-- Dark mode toggle -->
+            <div class="toggle-switch" id="themeToggle"></div>
+
+            <!-- Back button -->
+            <a
+              href="{% url 'FarmerDashboard' %}"
+              class="px-6 py-2 text-primary-dark dark:text-primary-light border-2 border-primary-dark dark:border-primary-light rounded-full hover:bg-primary-dark dark:hover:bg-primary-light hover:text-white dark:hover:text-gray-900 transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>Back</span>
+            </a>
+
+            <!-- Logout Button -->
+            <a
+              href="{% url 'index' %}"
+              class="px-6 py-2 text-red-600 dark:text-red-400 border-2 border-red-600 dark:border-red-400 rounded-full hover:bg-red-600 dark:hover:bg-red-400 hover:text-white transition-all font-medium flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section class="hero-section pt-16">
+      <div class="relative z-10 container mx-auto px-4 py-14 text-center">
+
+        <!-- Icon -->
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 fade-up"
+             style="background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
+          <i class="fas fa-landmark text-2xl text-white"></i>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="flex items-center justify-center gap-2 text-green-200 text-xs mb-4 fade-up">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+          <i class="fas fa-chevron-right text-[10px]"></i>
+          <span class="text-white font-medium">Government Schemes</span>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 fade-up delay-1"
+            style="font-family:'Lora',serif;">
+          Government Schemes &amp; Policies
+        </h2>
+
+        <!-- Subtitle -->
+        <p class="text-green-100 max-w-xl mx-auto text-sm md:text-base leading-relaxed fade-up delay-2">
+          Explore the latest agriculture schemes, subsidies, and welfare programs available
+          for farmers — verified and published by the Government of India.
+        </p>
+
+        <!-- Trust chips -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-6 fade-up delay-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-shield-alt"></i> Government Verified
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-sync-alt"></i> Regularly Updated
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                style="background:rgba(255,255,255,0.12); color:#d1fae5; border:1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-hand-holding-usd"></i> Subsidy Included
+          </span>
+        </div>
+      </div>
+
+      <!-- Wave -->
+      <div class="overflow-hidden leading-none" style="height:50px;">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none" class="w-full h-full">
+          <path d="M0,30 C480,60 960,0 1440,30 L1440,50 L0,50 Z"
+                fill="#f9fafb" class="dark:fill-[#0b1120]"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SEARCH + SCHEMES SECTION
+    ════════════════════════════════════════════ -->
+    <section class="section-bg py-12 bg-gray-50 dark:bg-[#0b1120] min-h-screen">
+      <div class="container mx-auto px-4">
+
+        <!-- Search bar -->
+        <div class="max-w-xl mx-auto mb-10">
+          <div class="search-wrapper">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Search scheme or policy name..."
+              class="search-bg w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white dark:bg-[#1e293b] dark:border-[#334155] dark:text-gray-100 dark:placeholder-gray-500 text-gray-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all"
+            />
+          </div>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 pl-1">
+            <i class="fas fa-info-circle mr-1"></i>
+            Search by scheme name or keyword to filter results.
+          </p>
+        </div>
+
+        <!-- Section label row -->
+        <div class="flex items-center justify-between mb-6 max-w-6xl mx-auto">
+          <div class="flex items-center gap-2">
+            <div class="w-1 h-6 rounded-full bg-primary-light"></div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-sm uppercase tracking-wider"
+                style="font-family:'Lora',serif;">
+              Available Schemes
+            </h3>
+          </div>
+          <span class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block"></span>
+            Live &amp; Verified
+          </span>
+        </div>
+
+        <!-- ── Schemes Grid ── -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7 max-w-6xl mx-auto"
+             id="schemesGrid">
+
+          {% for scheme in schemes %}
+          <!-- Scheme Card -->
+          <div class="scheme-card card-item card-bg bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-[#334155] flex flex-col"
+               data-name="{{ scheme.policy_name|lower }}">
+
+            <!-- Card Top Row -->
+            <div class="flex items-start justify-between p-6 pb-4">
+              <!-- Icon -->
+              <div class="w-12 h-12 rounded-xl bg-primary-pale dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-file-contract text-primary-dark dark:text-green-400 text-lg"></i>
+              </div>
+
+              <!-- Date badge -->
+              <span class="date-badge inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-[#1a2236] border border-gray-200 dark:border-[#334155] px-2.5 py-1 rounded-full">
+                <i class="fas fa-calendar-alt text-[10px]"></i>
+                {{ scheme.info_date }}
+              </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="px-6 pb-2 flex-1">
+              <!-- Policy Name -->
+              <h4 class="text-base font-bold text-gray-800 dark:text-white mb-2 leading-snug"
+                  style="font-family:'Lora',serif;">
+                {{ scheme.policy_name }}
+              </h4>
+
+              <!-- Type badge -->
+              <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-primary-dark dark:text-green-400 border border-green-100 dark:border-green-900/40 mb-3">
+                <i class="fas fa-tag text-[9px]"></i>
+                Agriculture Policy
+              </span>
+
+              <!-- Description -->
+              <p class="desc-text text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                {{ scheme.policy_desc }}
+              </p>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="px-6 py-4 mt-2 border-t border-gray-50 dark:border-[#334155] flex items-center justify-between">
+              <button
+                onclick="toggleDesc(this)"
+                class="text-xs text-primary-dark dark:text-green-400 font-medium hover:underline flex items-center gap-1 transition-colors">
+                <i class="fas fa-chevron-down text-[10px] expand-icon"></i>
+                <span class="btn-label">Read More</span>
+              </button>
+              <div class="flex items-center gap-1 text-xs text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full">
+                <i class="fas fa-check-circle text-[10px]"></i>
+                Verified
+              </div>
+            </div>
+          </div>
+          {% empty %}
+
+          <!-- Empty State -->
+          <div class="col-span-full flex flex-col items-center justify-center py-20 text-center">
+            <div class="empty-icon-bg w-20 h-20 rounded-full bg-gray-100 dark:bg-[#1e293b] flex items-center justify-center mb-5">
+              <i class="fas fa-folder-open text-3xl text-gray-300 dark:text-gray-600"></i>
+            </div>
+            <h4 class="text-gray-500 dark:text-gray-400 font-semibold text-lg mb-1"
+                style="font-family:'Lora',serif;">
+              No Schemes Available
+            </h4>
+            <p class="text-gray-400 dark:text-gray-500 text-sm max-w-sm">
+              No government schemes available at the moment. Please check back later or
+              contact the administration.
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- No search result message -->
+        <div id="noSearchResult" class="hidden text-center py-20">
+          <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#1e293b] flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-search text-xl text-gray-400"></i>
+          </div>
+          <p class="text-gray-500 dark:text-gray-400 font-medium">No schemes matched your search.</p>
+          <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Try a different keyword.</p>
+        </div>
+
+        <!-- Info note -->
+        <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-10 max-w-lg mx-auto">
+          <i class="fas fa-info-circle mr-1"></i>
+          All schemes listed are officially published by the Ministry of Agriculture &amp; Farmers Welfare,
+          Government of India. Eligibility criteria may vary.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="bg-primary-dark dark:bg-gray-950 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center space-x-3 mb-4">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="KisanSathi Logo"
+              class="w-12 h-12 object-contain"
+            />
+            <h3 class="text-2xl font-bold">KisanSathi</h3>
+          </div>
+
+          <p class="text-lg font-semibold text-green-100 mb-2">
+            Government Agriculture Portal
+          </p>
+
+          <p class="text-green-200 mb-1">
+            © 2026 Ministry of Agriculture & Farmers Welfare
+          </p>
+
+          <p class="text-green-300 font-medium text-sm">Government of India</p>
+
+          <div
+            class="mt-4 flex items-center justify-center space-x-4 text-green-200 text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lock"></i> SSL Secured
+            </span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-shield-alt"></i> Government Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════
+         SCRIPTS
+    ════════════════════════════════════════════ -->
+    <script>
+      // ── Dark Mode ──
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("theme") || "light";
+      if (saved === "dark") html.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        localStorage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+      });
+
+      // ── Live Search Filter ──
+      const searchInput  = document.getElementById("searchInput");
+      const schemesGrid  = document.getElementById("schemesGrid");
+      const noResult     = document.getElementById("noSearchResult");
+
+      searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase().trim();
+        const cards = schemesGrid.querySelectorAll(".card-item");
+        let visible = 0;
+
+        cards.forEach(card => {
+          const name = card.dataset.name || "";
+          const text = card.innerText.toLowerCase();
+          if (name.includes(query) || text.includes(query)) {
+            card.style.display = "";
+            visible++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        noResult.classList.toggle("hidden", visible > 0 || query === "");
+      });
+
+      // ── Read More / Less toggle ──
+      function toggleDesc(btn) {
+        const card     = btn.closest(".scheme-card");
+        const desc     = card.querySelector(".desc-text");
+        const icon     = btn.querySelector(".expand-icon");
+        const label    = btn.querySelector(".btn-label");
+        const expanded = desc.classList.toggle("expanded");
+        label.textContent = expanded ? "Read Less" : "Read More";
+        icon.style.transform = expanded ? "rotate(180deg)" : "rotate(0deg)";
+        icon.style.transition = "transform 0.3s ease";
+      }
+    </script>
+  </body>
+</html>

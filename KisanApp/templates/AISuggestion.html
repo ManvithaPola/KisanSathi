@@ -1,0 +1,51 @@
+{% load static %}
+<html>
+<head>
+<title>KisanSathi</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="{% static 'style.css' %}" rel="stylesheet" type="text/css" />
+<style>
+table, th, td {
+  border: 3px solid blue;
+  border-collapse: collapse;
+}
+
+th:nth-child(even),td:nth-child(even) {
+  background-color: #D6EEEE;
+}
+</style>
+</head>
+<style>
+body {
+  background-image: url("{% static 'images/back.jpg' %}");
+}
+</style>
+<body onload="displayImg()">
+<div class="main">
+  <div class="main_resize">
+    <div class="header">
+      <div class="logo">
+        <h1 align="center"><span>KisanSathi: AI-Assisted Farmer Support System</span><small></small></h1>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content_bg">
+        <div class="menu_nav">
+         
+          <ul>
+      <li><a href="{% url 'ViewCropRate' %}"><font size="3" color="black">View Crop Rate</a></li>
+      <li><a href="{% url 'Yield' %}"><font size="3" color="black">Crop Yield Predict</a></li>
+	 <li><a href="{% url 'Disease' %}"><font size="3" color="black">Pest & Disease Detection</a></li>	
+	 <li><a href="{% url 'Fertilizer' %}"><font size="3" color="black">Fertilizer Recommendation</a></li>
+	<li><a href="{% url 'Back' %}"><font size="3" color="black">Back</a></li>      
+	</ul>
+         
+        </div>
+        <div class="hbg"><img src="{% static 'images/header_images.jpg' %}" name="canvas" width="1010" height="200" alt="" /></div>
+
+		       
+ 
+ <font size="3" color="black"><center>{{ data|safe }}</center></font><br/>
+		<img src="data:image/png;base64, {{ img }}" alt="" />
+  </body>
+</html>
