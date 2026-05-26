@@ -109,7 +109,7 @@ def trainFertilizer(dataset_path):
         rf_fertilizer = pickle.load(f)
         f.close()
     else:
-        rf_fertilizer = RandomForestClassifier()
+        rf_fertilizer = RandomForestClassifier(n_estimators=50,max_depth=10,random_state=42)
         rf_fertilizer.fit(X_train, y_train)
         f = open("model/fertilizer.pckl", "wb")
         pickle.dump(rf_fertilizer, f)

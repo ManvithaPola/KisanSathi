@@ -2,3 +2,6 @@ model/fertilizer.pckl
 *.pckl
 *.h5
 *.npy
+KisanApp/__pycache__/
+*.pyc
+db.sqlite3
